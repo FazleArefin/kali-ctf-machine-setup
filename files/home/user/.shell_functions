@@ -14,3 +14,9 @@ function sandbox_shell_no_network {
 function sandbox_shell_paranoid_mode {
     /usr/bin/firejail --name=sandbox_shell_paranoid_mode --noprofile  --apparmor --net=none --private --private-dev --private-etc --nonewprivs --seccomp /bin/zsh
 }
+
+# prevents any commands from being written to persistent history for the rest of the shell session
+function history_off {
+    unset HISTFILE
+    echo "(╯︵╰,)╭🕶️  Privacy mode enabled — history disabled for this session."
+}
