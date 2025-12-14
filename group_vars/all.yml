@@ -10,6 +10,7 @@ system_packages:
   - bettercap  # Powerful, flexible and portable network attack and monitoring tool
   - btop  # Resource monitor that shows usage and stats for processor, memory, disks, network and processes
   - burpsuite  # Integrated platform for performing security testing of web applications
+  - caido  # Web security auditing toolkit
   - cargo  # Rust language package manager and build tool
   - chisel  # Fast TCP/UDP tunnel, transported over HTTP, secured via SSH
   - chromium  # Open-source web browser project
