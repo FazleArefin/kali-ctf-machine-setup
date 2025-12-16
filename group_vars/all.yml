@@ -6,6 +6,7 @@ setup_vuln_docker_images: false
 system_packages:
   - alacritty  # GPU-accelerated terminal emulator
   - amass  # In-depth DNS enumeration and attack surface mapping tool
+  - autorecon  # Automated reconnaissance tool
   - bat  # cat clone with syntax highlighting and Git integration
   - bettercap  # Powerful, flexible and portable network attack and monitoring tool
   - btop  # Resource monitor that shows usage and stats for processor, memory, disks, network and processes
@@ -23,6 +24,7 @@ system_packages:
   - fzf  # Command-line fuzzy finder
   - git  # Distributed version control system
   - git-extras  # GIT utilities -- repo summary, repl, changelog population, author commit percentages and more
+  - glow  # Terminal markdown reader
   - gobuster  # Directory/file, DNS and VHost busting tool written in Go
   - golang-go  # Go programming language compiler and tools
   - hashrat  # Hashing tool for files and data streams
@@ -33,6 +35,7 @@ system_packages:
   - iperf3  # Tool for active measurements of the maximum achievable bandwidth on IP networks
   - jq  # Command-line JSON processor
   - kali-tools-top10  # Metapackage for Kali's top 10 security tools
+  - lazygit  # Simple terminal UI for git commands
   - libpcap-dev  # Development library for packet capture (required for naabu)
   - ligolo-ng  # Advanced tunneling/pivoting tool using a TUN interface
   - linux-exploit-suggester  # Linux privilege escalation auditing tool
@@ -50,6 +53,7 @@ system_packages:
   - ngrep  # Grep applied to network traffic
   - nishang  # PowerShell for penetration testing and offensive security
   - oscanner  # Oracle assessment framework
+  - peass  # Privilege escalation awesome scripts suite
   - p0f  # Passive OS fingerprinting tool
   - parallel  # Build and execute shell command lines from standard input in parallel
   - payloadsallthethings  # Collection of useful payloads and bypasses for Web Application Security
@@ -74,7 +78,7 @@ system_packages:
   # - tree-sitter-cli  # CLI for Tree-sitter, a parser generator tool and incremental parsing library (required by neovim/lazyvim)
   - trivy  # Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Kubernetes, code repositories, clouds and more
   - trufflehog  # Searches through git repositories for high entropy strings and secrets
-  - xh  # Drop-in replacement for http/httpie
+  - xh  # Friendly and fast tool for sending HTTP requests, a curl/httpie alternative
   - xterm  # Standard terminal emulator for the X Window System
   - zoxide  # Smarter 'cd' command
 
@@ -85,14 +89,11 @@ problematic_packages:
 pipx_packages:
   - ruff  # Python linter and formatter
   - chepy  # Python lib/cli equivalent of the awesome CyberChef tool
-  - git+https://github.com/Pennyw0rth/NetExec  # Network pentest tool; replacement for discontinued CrackMapExec
-  - git+https://github.com/Tib3rius/AutoRecon.git  # Multi-threaded network reconnaissance tool for automated enumeration
 
 cargo_packages:
   - tlrc  # Official tldr rust client
 
 golang_tools:
-  - github.com/jesseduffield/lazygit@latest  # Simple terminal UI for git commands
   - github.com/wagoodman/dive@latest  # Tool for exploring each layer in a docker image
 
 # nerd fonts from https://github.com/ryanoasis/nerd-fonts
