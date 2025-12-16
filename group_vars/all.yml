@@ -74,6 +74,7 @@ system_packages:
   # - tree-sitter-cli  # CLI for Tree-sitter, a parser generator tool and incremental parsing library (required by neovim/lazyvim)
   - trivy  # Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Kubernetes, code repositories, clouds and more
   - trufflehog  # Searches through git repositories for high entropy strings and secrets
+  - xh  # Drop-in replacement for http/httpie
   - xterm  # Standard terminal emulator for the X Window System
   - zoxide  # Smarter 'cd' command
 
@@ -88,7 +89,6 @@ pipx_packages:
   - git+https://github.com/Tib3rius/AutoRecon.git  # Multi-threaded network reconnaissance tool for automated enumeration
 
 cargo_packages:
-  - xh  # Drop-in replacement for http/httpie
   - tlrc  # Official tldr rust client
 
 golang_tools:
