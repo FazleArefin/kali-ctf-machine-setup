@@ -173,15 +173,6 @@
             dest: /usr/share/privesc-scripts
             state: link
 
-        - name: Git clone PEASS-ng
-          ansible.builtin.git:
-            repo: 'https://github.com/carlospolop/PEASS-ng.git'
-            dest: /opt/privesc-scripts/PEASS-ng
-            clone: true
-            version: master
-            update: true
-            force: true
-
         - name: Git clone LinEnum
           ansible.builtin.git:
             repo: 'https://github.com/rebootuser/LinEnum.git'
@@ -516,4 +507,3 @@
           ansible.builtin.apt:
             autoremove: true
             autoclean: true
-
