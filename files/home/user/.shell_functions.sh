@@ -1,5 +1,27 @@
 # .shell_functions.sh - Custom shell functions for convenience and system management
 
+# Check if the shell is interactive
+[[ $- != *i* ]] && return
+
+function upgrade_system_packages {
+    (
+        set -e
+        export DEBIAN_FRONTEND=noninteractive
+
+        # Fix any previously interrupted installs
+        sudo -E apt install -y --fix-broken
+
+        sudo -E apt update
+        sudo -E apt full-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+        sudo -E apt autoremove --purge -y
+        sudo -E apt autoclean
+
+        if [ -f /var/run/reboot-required ]; then
+            printf '\n\033[0;31m[!] A reboot is required to finish updates.\033[0m\n'
+        fi
+    )
+}
+
 # a locked-down firefox instance running inside a sandbox
 function safefox {
     /usr/bin/firejail --name=safe-firefox --apparmor --seccomp --private --private-dev --private-tmp --protocol=inet firefox --new-instance --no-remote --safe-mode --private-window $1

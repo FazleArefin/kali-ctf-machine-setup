@@ -376,24 +376,24 @@
       become: true
       become_user: "{{ local_username }}"
       block:
-        - name: Copy sample .shell_aliases and .shell_functions files
+        - name: Copy sample .shell_*.sh files
           ansible.builtin.copy:
             src: "{{ item }}"
             dest: "~{{ local_username }}/{{ item | basename }}"
             mode: '0644'
           with_items:
-            - home/user/.shell_aliases
-            - home/user/.shell_functions
-            - home/user/.shell_variables
+            - home/user/.shell_aliases.sh
+            - home/user/.shell_functions.sh
+            - home/user/.shell_variables.sh
 
-        - name: Include .shell_aliases, .shell_functions and .shell_variables files in .zshrc
+        - name: Include .shell_*.sh files in .zshrc
           ansible.builtin.blockinfile:
             path: "~{{ local_username }}/.zshrc"
             marker: "# {mark} ANSIBLE MANAGED BLOCK - extra shell functions and aliases"
             block: |
-              [[ -f ~/.shell_aliases ]] && source ~/.shell_aliases
-              [[ -f ~/.shell_functions ]] && source ~/.shell_functions
-              [[ -f ~/.shell_variables ]] && source ~/.shell_variables
+              [[ -f ~/.shell_aliases.sh ]] && source ~/.shell_aliases.sh
+              [[ -f ~/.shell_functions.sh ]] && source ~/.shell_functions.sh
+              [[ -f ~/.shell_variables.sh ]] && source ~/.shell_variables.sh
             create: false
 
     - name: Install VSCodium and some plugins

@@ -1,5 +1,8 @@
 # .shell_aliases.sh - Custom shell aliases for convenience and system management
 
+# Check if the shell is interactive
+[[ $- != *i* ]] && return
+
 # Flush file system buffers with 'sync' and drop cached data from memory
 alias clear_cache="/usr/bin/sudo sh -c 'sync && echo 1 > /proc/sys/vm/drop_caches'"
 
