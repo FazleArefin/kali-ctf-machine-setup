@@ -29,7 +29,6 @@ system_packages:
   - golang-go  # Go programming language compiler and tools
   - hashrat  # Hashing tool for files and data streams
   - hcxtools  # Tools for capturing and converting wireless packets
-  - hexyl  # Command-line hex viewer with color output
   - hping3  # Network tool for packet generation and analysis
   - httpie  # Command line HTTP client, user-friendly cURL replacement
   - iperf3  # Tool for active measurements of the maximum achievable bandwidth on IP networks
