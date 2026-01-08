@@ -238,7 +238,7 @@
             force: true
 
     - name: Setup some CTF style vulnerable docker images and packages
-      when: setup_vuln_docker_images
+      when: setup_vuln_docker_images | bool
       block:
         - name: Install docker packages
           ansible.builtin.apt:
