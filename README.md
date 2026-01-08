@@ -39,7 +39,7 @@ ansible-galaxy collection install ansible.posix \
 ### 3. Clone this repo
 
 ```zsh
-git clone https://github.com/fazlearefin/kali-ctf-machine-setup.git
+git clone https://github.com/FazleArefin/kali-ctf-machine-setup.git
 cd kali-ctf-machine-setup
 ```
 
@@ -52,13 +52,13 @@ Run one of the commands below depending on whether you want the vulnerable Docke
 #### Install WITHOUT Docker vulnerable images
 
 ```zsh
-ansible-playbook -vv -i localhost, -e "{ setup_vuln_docker_images: false }" -e "local_username=$(id -un)" -K main.yml
+ansible-playbook -vv -e "setup_vuln_docker_images=false local_username=$(id -un)" -K main.yml
 ```
 
 #### Install WITH Docker vulnerable images
 
 ```zsh
-ansible-playbook -vv -i localhost, -e "{ setup_vuln_docker_images: true }" -e "local_username=$(id -un)" -K main.yml
+ansible-playbook -vv -e "setup_vuln_docker_images=true local_username=$(id -un)" -K main.yml
 ```
 
 ### 5. Further customizations (optional)
