@@ -83,4 +83,4 @@ mods = "Control"
 
 [terminal.shell]
 program = "/usr/bin/zsh"
-args = ["-c", "if ! tmux ls 2>/dev/null | grep -q -E '^main.*attached'; then tmux attach -t main || tmux new -s main; else /usr/bin/zsh; fi"]
+args = ["-c", "tmux list-clients -t main 2>/dev/null | grep -q . && /usr/bin/zsh || tmux new-session -As main"]
