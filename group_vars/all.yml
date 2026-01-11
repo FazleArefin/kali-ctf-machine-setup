@@ -103,16 +103,10 @@ nerd_fonts:
   - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFontMono-Bold.ttf"          # don't remove; alacritty config uses this
   - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFontMono-Italic.ttf"     # don't remove; alacritty config uses this
   - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFontMono-Regular.ttf"    # don't remove; alacritty config uses this
-  - "{{ nerd_fonts_base_url }}/FiraCode/Bold/FiraCodeNerdFontMono-Bold.ttf"
-  - "{{ nerd_fonts_base_url }}/FiraCode/Regular/FiraCodeNerdFontMono-Regular.ttf"
   - "{{ nerd_fonts_base_url }}/JetBrainsMono/Ligatures/BoldItalic/JetBrainsMonoNerdFontMono-BoldItalic.ttf"
   - "{{ nerd_fonts_base_url }}/JetBrainsMono/Ligatures/Bold/JetBrainsMonoNerdFontMono-Bold.ttf"
   - "{{ nerd_fonts_base_url }}/JetBrainsMono/Ligatures/Italic/JetBrainsMonoNerdFontMono-Italic.ttf"
   - "{{ nerd_fonts_base_url }}/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFontMono-Regular.ttf"
-  - "{{ nerd_fonts_base_url }}/JetBrainsMono/NoLigatures/BoldItalic/JetBrainsMonoNLNerdFontMono-BoldItalic.ttf"
-  - "{{ nerd_fonts_base_url }}/JetBrainsMono/NoLigatures/Bold/JetBrainsMonoNLNerdFontMono-Bold.ttf"
-  - "{{ nerd_fonts_base_url }}/JetBrainsMono/NoLigatures/Italic/JetBrainsMonoNLNerdFontMono-Italic.ttf"
-  - "{{ nerd_fonts_base_url }}/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFontMono-Regular.ttf"
   - "{{ nerd_fonts_base_url }}/SourceCodePro/SauceCodeProNerdFontMono-BoldItalic.ttf"
   - "{{ nerd_fonts_base_url }}/SourceCodePro/SauceCodeProNerdFontMono-Bold.ttf"
   - "{{ nerd_fonts_base_url }}/SourceCodePro/SauceCodeProNerdFontMono-Italic.ttf"
@@ -121,7 +115,6 @@ nerd_fonts:
   - "{{ nerd_fonts_base_url }}/VictorMono/Bold/VictorMonoNerdFontMono-Bold.ttf"
   - "{{ nerd_fonts_base_url }}/VictorMono/Italic/VictorMonoNerdFontMono-Italic.ttf"
   - "{{ nerd_fonts_base_url }}/VictorMono/Regular/VictorMonoNerdFontMono-Regular.ttf"
-  - "{{ nerd_fonts_base_url }}/DroidSansMono/DroidSansMNerdFontMono-Regular.otf"
 
 projectdiscovery_tools:
   - pdtm  # ProjectDiscovery Tool Manager - manages installation and updates of ProjectDiscovery tools
