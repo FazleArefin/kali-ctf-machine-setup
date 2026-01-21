@@ -69,6 +69,7 @@ system_packages:
   - sshuttle  # Transparent proxy server for VPN-like functionality
   - sslstrip  # Tool for stripping SSL/TLS from HTTP traffic
   - strace  # Diagnostic, debugging and instructional userspace tracer
+  - tailspin  # log file viewer with syntax highlighting
   - tcptraceroute  # Traceroute implementation using TCP packets
   - testssl.sh  # Testing TLS/SSL encryption on remote servers
   - tig  # Text-mode interface for git
