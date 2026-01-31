@@ -303,6 +303,7 @@
           ansible.builtin.file:
             path: /tmp/projectdiscovery
             state: directory
+            mode: '0755'
 
         - name: Get host architecture
           ansible.builtin.command: dpkg --print-architecture
@@ -524,7 +525,7 @@
         src: /usr/bin/batcat
         dest: /usr/local/bin/bat
         state: link
-        force: yes
+        force: true
 
     - name: Final cleanup
       block:
