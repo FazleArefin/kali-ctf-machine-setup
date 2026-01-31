@@ -34,12 +34,12 @@
             state: absent
             force: true
           with_items:
-            - "~{{ local_username }}/.local/share/pipx"
-            - "~{{ local_username }}/.local/bin"
+            - "/home/{{ local_username }}/.local/share/pipx"
+            - "/home/{{ local_username }}/.local/bin"
 
         - name: Ensure pipx directories exist again
           ansible.builtin.file:
-            path: "~{{ local_username }}/.local/bin"
+            path: "/home/{{ local_username }}/.local/bin"
             state: directory
             mode: '0755'
 
@@ -137,7 +137,7 @@
         - name: Git clone tmux plugin repo
           ansible.builtin.git:
             repo: "{{ tmux_plugin_repo }}"
-            dest: "~{{ local_username }}/.tmux/plugins/tpm"
+            dest: "/home/{{ local_username }}/.tmux/plugins/tpm"
             clone: true
             version: master
           become: true
@@ -146,13 +146,13 @@
         - name: Copy sample .tmux.conf file to the user's homedir
           ansible.builtin.copy:
             src: home/user/.tmux.conf
-            dest: "~{{ local_username }}/.tmux.conf"
+            dest: "/home/{{ local_username }}/.tmux.conf"
             mode: '0644'
           become: true
           become_user: "{{ local_username }}"
 
         - name: Install all required tmux plugins
-          ansible.builtin.shell: "~{{local_username}}/.tmux/plugins/tpm/scripts/install_plugins.sh"
+          ansible.builtin.shell: "/home/{{local_username}}/.tmux/plugins/tpm/scripts/install_plugins.sh"
           become: true
           become_user: "{{ local_username }}"
 
@@ -162,14 +162,14 @@
       block:
         - name: Create local fonts directory
           ansible.builtin.file:
-            path: "~{{ local_username }}/.local/share/fonts"
+            path: "/home/{{ local_username }}/.local/share/fonts"
             mode: '0755'
             state: directory
 
         - name: Download nerd fonts to local fonts folder
           ansible.builtin.get_url:
             url: "{{ item }}"
-            dest: "~{{ local_username }}/.local/share/fonts/"
+            dest: "/home/{{ local_username }}/.local/share/fonts/"
             mode: '0644'
           with_items: "{{ nerd_fonts }}"
 
@@ -351,13 +351,13 @@
 
         - name: Install all other projectdiscovery.io tools
           ansible.builtin.shell:
-            cmd: "~{{ local_username }}/.pdtm/go/bin/pdtm -i {{ item }}"
-            creates: "~{{ local_username }}/.pdtm/go/bin/{{item}}"
+            cmd: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -i {{ item }}"
+            creates: "/home/{{ local_username }}/.pdtm/go/bin/{{item}}"
           with_items: "{{ projectdiscovery_tools }}"
 
         - name: Update all projectdiscovery.io tools
           ansible.builtin.shell:
-            cmd: "~{{ local_username }}/.pdtm/go/bin/pdtm -update-all"
+            cmd: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -update-all"
 
     - name: Setup some essential paths
       become: true
@@ -365,7 +365,7 @@
       block:
         - name: Set bin path for rust/cargo, pipx, and golang
           ansible.builtin.blockinfile:
-            path: "~{{ local_username }}/.zshrc"
+            path: "/home/{{ local_username }}/.zshrc"
             marker: "# {mark} ANSIBLE MANAGED BLOCK - bin paths"
             block: |
               # rust binaries installed using cargo
@@ -384,7 +384,7 @@
       block:
         - name: Ensure .ssh directory exists
           ansible.builtin.file:
-            path: "~{{ local_username }}/.ssh"
+            path: "/home/{{ local_username }}/.ssh"
             state: directory
             mode: '0700'
 
@@ -393,7 +393,7 @@
             state: present
             type: rsa
             size: 4096
-            path: "~{{ local_username }}/.ssh/id_rsa"
+            path: "/home/{{ local_username }}/.ssh/id_rsa"
 
     - name: Setup custom shell aliases and functions
       become: true
@@ -411,7 +411,7 @@
 
         - name: Include .shell_*.sh files in .zshrc
           ansible.builtin.blockinfile:
-            path: "~{{ local_username }}/.zshrc"
+            path: "/home/{{ local_username }}/.zshrc"
             marker: "# {mark} ANSIBLE MANAGED BLOCK - extra shell functions and aliases"
             block: |
               [[ -f ~/.shell_aliases.sh ]] && source ~/.shell_aliases.sh
@@ -472,7 +472,7 @@
       block:
         - name: Create alacritty config directory
           ansible.builtin.file:
-            path: "~{{ local_username }}/.config/alacritty"
+            path: "/home/{{ local_username }}/.config/alacritty"
             state: directory
             mode: '0755'
             owner: "{{ local_username }}"
@@ -487,7 +487,7 @@
         - name: Copy sample alacritty config file
           ansible.builtin.copy:
             src: home/user/.config/alacritty/alacritty.toml
-            dest: "~{{ local_username }}/.config/alacritty/alacritty.toml"
+            dest: "/home/{{ local_username }}/.config/alacritty/alacritty.toml"
             mode: '0644'
       become: true
       become_user: "{{ local_username }}"
@@ -496,13 +496,13 @@
         - name: Clone lazyvim starter git repo
           ansible.builtin.git:
             repo: "{{ lazyvim_starter_url }}"
-            dest: "~{{ local_username }}/.config/nvim"
+            dest: "/home/{{ local_username }}/.config/nvim"
       become: true
       become_user: "{{ local_username }}"
 
     - name: Initialize zoxide in zsh shell
       ansible.builtin.lineinfile:
-        path: "~{{ local_username }}/.zshrc"
+        path: "/home/{{ local_username }}/.zshrc"
         line: "{{ item }}"
       with_items:
         - ""
@@ -511,7 +511,7 @@
 
     - name: Initialize fzf in zsh shell
       ansible.builtin.lineinfile:
-        path: "~{{ local_username }}/.zshrc"
+        path: "/home/{{ local_username }}/.zshrc"
         line: "{{ item }}"
       with_items:
         - ""
