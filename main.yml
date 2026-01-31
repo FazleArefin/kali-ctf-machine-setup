@@ -103,6 +103,29 @@
             mode: '0644'
             backup: true
 
+    - name: Configure mitmproxy CA certificate
+      block:
+        - name: Run mitmdump to generate CA certificates
+          ansible.builtin.shell: "timeout 5s mitmdump > /dev/null 2>&1 || true"
+          become: true
+          become_user: "{{ local_username }}"
+          args:
+            creates: "/home/{{ local_username }}/.mitmproxy/mitmproxy-ca-cert.pem"
+
+        - name: Copy mitmproxy CA certificate to system store
+          ansible.builtin.copy:
+            src: "/home/{{ local_username }}/.mitmproxy/mitmproxy-ca-cert.pem"
+            dest: "/usr/local/share/ca-certificates/mitmproxy.crt"
+            mode: '0644'
+            owner: root
+            group: root
+            remote_src: true
+          register: mitmproxy_ca_copy
+
+        - name: Update CA certificates
+          ansible.builtin.command: update-ca-certificates
+          when: mitmproxy_ca_copy.changed
+
     - name: Setup tmux
       block:
         - name: Install packages needed for tmux
