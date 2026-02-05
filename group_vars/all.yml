@@ -42,6 +42,7 @@ system_packages:
   - luarocks  # Package manager for Lua modules (required by neovim/lazyvim)
   - massdns  # High-performance DNS stub resolver for bulk lookups and reconnaissance
   - mat2  # Metadata removal tool for various file formats
+  - mcp-kali-server  # API bridge conneccting MCP clients to the API server
   - mdk4  # Wi-Fi testing tool for security and robustness
   - meld  # Visual diff and merge tool
   - mitmproxy  # Interactive TLS-capable intercepting HTTP proxy
