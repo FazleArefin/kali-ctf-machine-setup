@@ -6,6 +6,7 @@ setup_vuln_docker_images: false
 system_packages:
   - alacritty  # GPU-accelerated terminal emulator
   - amass  # In-depth DNS enumeration and attack surface mapping tool
+  - arjun # HTTP parameter discovery suite
   - autorecon  # Automated reconnaissance tool
   - bat  # cat clone with syntax highlighting and Git integration
   - bettercap  # Powerful, flexible and portable network attack and monitoring tool
@@ -16,19 +17,24 @@ system_packages:
   - chisel  # Fast TCP/UDP tunnel, transported over HTTP, secured via SSH
   - chromium  # Open-source web browser project
   - dconf-cli  # Command line tool for managing dconf settings
+  - dotdotpwn  # Directory traversal fuzzer
   - duf  # Disk usage/free utility with a user-friendly interface
   - fd-find  # Simple, fast and user-friendly alternative to 'find' (required by neovim/lazyvim)
   - feroxbuster  # Fast, simple, recursive content discovery tool written in Rust
   - firejail  # Sandboxing utility to restrict the running environment of untrusted applications
   - foliate  # Simple and modern GTK eBook reader
+  - foremost  # File carving tool for recovering files based on their headers, footers, and internal data structures
   - fzf  # Command-line fuzzy finder
+  - ghidra  # Software reverse engineering (SRE) framework
   - git  # Distributed version control system
   - git-extras  # GIT utilities -- repo summary, repl, changelog population, author commit percentages and more
   - glow  # Terminal markdown reader
   - gobuster  # Directory/file, DNS and VHost busting tool written in Go
   - golang-go  # Go programming language compiler and tools
+  - hakrawler  # Fast web crawler designed for easy and quick enumeration of URLs and assets
   - hashrat  # Hashing tool for files and data streams
   - hcxtools  # Tools for capturing and converting wireless packets
+  - hexstrike-ai  # AI-Powered MCP Cybersecurity Automation Platform
   - hping3  # Network tool for packet generation and analysis
   - httpie  # Command line HTTP client, user-friendly cURL replacement
   - iperf3  # Tool for active measurements of the maximum achievable bandwidth on IP networks
@@ -40,10 +46,12 @@ system_packages:
   - linux-exploit-suggester  # Linux privilege escalation auditing tool
   - lsd  # Modern replacement for 'ls' command
   - luarocks  # Package manager for Lua modules (required by neovim/lazyvim)
+  - maltego  # Interactive data mining tool for link analysis and data visualization
   - massdns  # High-performance DNS stub resolver for bulk lookups and reconnaissance
   - mat2  # Metadata removal tool for various file formats
   - mcp-kali-server  # API bridge conneccting MCP clients to the API server
   - mdk4  # Wi-Fi testing tool for security and robustness
+  - medusa  # Fast, massively parallel, modular web fuzzer
   - meld  # Visual diff and merge tool
   - mitmproxy  # Interactive TLS-capable intercepting HTTP proxy
   - mtr-tiny  # Network diagnostic tool combining traceroute and ping
@@ -56,6 +64,7 @@ system_packages:
   - peass  # Privilege escalation awesome scripts suite
   - p0f  # Passive OS fingerprinting tool
   - parallel  # Build and execute shell command lines from standard input in parallel
+  - paramspider  # Mining parameter from the dark coners of the web archives
   - payloadsallthethings  # Collection of useful payloads and bypasses for Web Application Security
   - pcre2-utils  # Provides pcre2grep and pcre2test (perl-compatible regex)
   - pipx  # Install and run Python applications in isolated environments
@@ -65,14 +74,18 @@ system_packages:
   - python3-pwntools  # CTF framework and exploit development library
   - realtek-rtl88xxau-dkms  # Realtek RTL88xxAU driver in DKMS format
   - ripgrep  # Recursively searches directories for a regex pattern
+  - ropper # Tool to find gadgets in binaries
   - rlwrap  # Readline wrapper for command line interfaces
   - seclists  # Collection of multiple types of lists used during security assessments
+  - sherlock  # Tool to find usernames across social networks
   - sshuttle  # Transparent proxy server for VPN-like functionality
   - sslstrip  # Tool for stripping SSL/TLS from HTTP traffic
+  - steghide  # Steganography tool for hiding data in various image formats
   - strace  # Diagnostic, debugging and instructional userspace tracer
   - tailspin  # log file viewer with syntax highlighting
   - tcptraceroute  # Traceroute implementation using TCP packets
   - testssl.sh  # Testing TLS/SSL encryption on remote servers
+  - theharvester  # E-mail, subdomain and people names harvester
   - tig  # Text-mode interface for git
   - tnscmd10g  # Oracle TNS command-line tool
   - tree  # Recursive directory listing command
@@ -80,7 +93,9 @@ system_packages:
   - trivy  # Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Kubernetes, code repositories, clouds and more
   - trufflehog  # Searches through git repositories for high entropy strings and secrets
   - xh  # Friendly and fast tool for sending HTTP requests, a curl/httpie alternative
+  - xsser  # Automated XSS vulnerability scanner
   - xterm  # Standard terminal emulator for the X Window System
+  - zaproxy  # OWASP Zed Attack Proxy - web application security scanner
   - zoxide  # Smarter 'cd' command
 
 
@@ -90,12 +105,24 @@ problematic_packages:
 pipx_packages:
   - ruff  # Python linter and formatter
   - chepy  # Python lib/cli equivalent of the awesome CyberChef tool
+  - checkov  # Static code analysis tool for security vulnerabilities
+  - prowler  # AWS security best practices assessment tool
+  - scoutsuite  # Multi-cloud security-auditing tool
+  - volatility3  # Advanced memory forensics framework
 
 cargo_packages:
+  - uv  # python packge and project manager
   - tlrc  # Official tldr rust client
+  - rustscan  # Fast port scanner built in Rust
 
 golang_tools:
   - github.com/wagoodman/dive@latest  # Tool for exploring each layer in a docker image
+  - github.com/tomnomnom/anew@latest  # Tool to add new lines to a file
+  - github.com/lc/gau/v2/cmd/gau@latest  # Fetch known URLs from AlienVault's OTX, the Wayback Machine, and Common Crawl
+  - github.com/tomnomnom/waybackurls@latest  # Tool to fetch all the URLs that the Wayback Machine has archived for a given domain
+  - github.com/hahwul/dalfox/v2@latest  # Fast and powerful XSS scanner
+  - github.com/tomnomnom/qsreplace@latest  # Tool to replace query string parameters with custom values
+  - github.com/jaeles-project/jaeles@latest  # Modular web scanner written in Go
 
 # nerd fonts from https://github.com/ryanoasis/nerd-fonts
 nerd_fonts_version: v3.4.0  # TODO: bump up version number as newer versions are made avaialbe from source git repo https://github.com/ryanoasis/nerd-fonts/releases/
