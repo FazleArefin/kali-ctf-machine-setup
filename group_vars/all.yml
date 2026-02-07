@@ -90,6 +90,7 @@ problematic_packages:
 pipx_packages:
   - ruff  # Python linter and formatter
   - chepy  # Python lib/cli equivalent of the awesome CyberChef tool
+  - cai-framework  # build and deploy AI-powered offensive and defensive automation
 
 cargo_packages:
   - tlrc  # Official tldr rust client
