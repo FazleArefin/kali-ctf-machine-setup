@@ -31,6 +31,7 @@ system_packages:
   - hcxtools  # Tools for capturing and converting wireless packets
   - hping3  # Network tool for packet generation and analysis
   - httpie  # Command line HTTP client, user-friendly cURL replacement
+  - imagemagick  # Software suite to create, edit, compose, or convert images
   - iperf3  # Tool for active measurements of the maximum achievable bandwidth on IP networks
   - jq  # Command-line JSON processor
   - kali-tools-top10  # Metapackage for Kali's top 10 security tools
