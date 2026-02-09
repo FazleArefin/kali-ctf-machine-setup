@@ -54,6 +54,7 @@ system_packages:
   - ngrep  # Grep applied to network traffic
   - nishang  # PowerShell for penetration testing and offensive security
   - oscanner  # Oracle assessment framework
+  - pandoc # Universal document converter
   - peass  # Privilege escalation awesome scripts suite
   - p0f  # Passive OS fingerprinting tool
   - parallel  # Build and execute shell command lines from standard input in parallel
