@@ -111,6 +111,7 @@ pipx_packages:
   - prowler  # AWS security best practices assessment tool
   - scoutsuite  # Multi-cloud security-auditing tool
   - volatility3  # Advanced memory forensics framework
+  - maigret  # OSINT tool to search for usernames across hundreds of platforms
 
 cargo_packages:
   - uv  # python packge and project manager
