@@ -99,10 +99,6 @@ system_packages:
   - zaproxy  # OWASP Zed Attack Proxy - web application security scanner
   - zoxide  # Smarter 'cd' command
 
-
-problematic_packages:
-  - python3-httpx    # this installs `httpx` which interferes with `httpx` from projectdiscovery.io
-
 pipx_packages:
   - ruff  # Python linter and formatter
   - chepy  # Python lib/cli equivalent of the awesome CyberChef tool
