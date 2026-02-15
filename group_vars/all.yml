@@ -60,6 +60,7 @@ system_packages:
   - neovim  # Hyperextensible Vim-based text editor
   - ngrep  # Grep applied to network traffic
   - nishang  # PowerShell for penetration testing and offensive security
+  - npm  # Node.js package manager
   - oscanner  # Oracle assessment framework
   - pandoc # Universal document converter
   - peass  # Privilege escalation awesome scripts suite
