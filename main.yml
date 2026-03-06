@@ -52,16 +52,11 @@
           ansible.builtin.command: "pipx reinstall-all --verbose"
           changed_when: false
 
-    - name: Create seclists symlink
+    - name: Process wordlists
       block:
         - name: Gather the package facts
           ansible.builtin.package_facts:
             manager: auto
-          no_log: true
-
-        - name: Print the package facts
-          ansible.builtin.debug:
-            var: ansible_facts.packages
           no_log: true
 
         - name: Create symlink to seclists from wordlists dir
@@ -70,6 +65,12 @@
             dest: /usr/share/wordlists/seclists
             state: link
           when: "'seclists' in ansible_facts.packages"
+
+        - name: Extract rockyou.txt.gz wordlist
+          ansible.builtin.command:
+            cmd: gunzip --keep /usr/share/wordlists/rockyou.txt.gz
+            creates: /usr/share/wordlists/rockyou.txt
+          when: "'wordlists' in ansible_facts.packages"
 
     - name: Setup anonymous browsing capability
       block:
