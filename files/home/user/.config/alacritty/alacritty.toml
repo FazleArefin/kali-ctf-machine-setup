@@ -9,7 +9,7 @@ WINIT_X11_SCALE_FACTOR = "1.0"
 
 [window]
 decorations = "Buttonless"
-opacity = 0.95
+opacity = 0.99
 blur = true
 
 [window.padding]
