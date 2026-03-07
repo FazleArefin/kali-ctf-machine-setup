@@ -52,13 +52,13 @@ Run one of the commands below depending on whether you want the vulnerable Docke
 #### Install WITHOUT Docker vulnerable images
 
 ```zsh
-ansible-playbook -vv -e "setup_vuln_docker_images=false local_username=$(id -un)" -K main.yml
+ansible-playbook -vv -e "setup_vuln_docker_images=false disable_power_management=false local_username=$(id -un)" -K main.yml
 ```
 
 #### Install WITH Docker vulnerable images
 
 ```zsh
-ansible-playbook -vv -e "setup_vuln_docker_images=true local_username=$(id -un)" -K main.yml
+ansible-playbook -vv -e "setup_vuln_docker_images=true disable_power_management=false local_username=$(id -un)" -K main.yml
 ```
 
 ### 5. Further customizations (optional)

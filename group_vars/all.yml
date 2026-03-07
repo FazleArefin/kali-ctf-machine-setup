@@ -2,6 +2,7 @@
 
 local_username: "{{ local_username }}"
 setup_vuln_docker_images: false
+disable_power_management: false
 
 system_packages:
   - alacritty  # GPU-accelerated terminal emulator

@@ -528,6 +528,51 @@
         state: link
         force: true
 
+    - name: Disable screensaver and power management
+      vars:
+        desktop_env: "{{ lookup('env', 'DESKTOP_SESSION') | default('', true) }}"
+      when:
+        - disable_power_management | bool
+        - desktop_env == 'xfce' or 'xfce' in desktop_env
+      block:
+        - name: Disable GNOME screensaver idle activation
+          community.general.dconf:
+            key: /org/gnome/desktop/screensaver/idle-activation-enabled
+            value: "false"
+
+        - name: Set GNOME session idle delay to 0
+          community.general.dconf:
+            key: /org/gnome/desktop/session/idle-delay
+            value: "uint32 0"
+
+        - name: Disable XFCE power manager DPMS
+          community.general.xfconf:
+            channel: xfce4-power-manager
+            property: /xfce4-power-manager/dpms-enabled
+            value: "false"
+            value_type: bool
+
+        - name: Disable XFCE DPMS monitor off
+          community.general.xfconf:
+            channel: xfce4-power-manager
+            property: /xfce4-power-manager/dpms-on-ac-off
+            value: "0"
+            value_type: int
+
+        - name: Disable XFCE DPMS sleep
+          community.general.xfconf:
+            channel: xfce4-power-manager
+            property: /xfce4-power-manager/dpms-on-ac-sleep
+            value: "0"
+            value_type: int
+
+        - name: Disable XFCE lock on suspend/hibernate
+          community.general.xfconf:
+            channel: xfce4-power-manager
+            property: /xfce4-power-manager/lock-screen-suspend-hibernate
+            value: "false"
+            value_type: bool
+
     - name: Final cleanup
       block:
         - name: Cleanup apt packages and repodata
