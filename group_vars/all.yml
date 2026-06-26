@@ -1,6 +1,6 @@
 ---
 
-local_username: "{{ local_username }}"
+local_username: "{{ lookup('env', 'USER') }}"   # Override via: -e "local_username=$(id -un)"
 setup_vuln_docker_images: false
 
 system_packages:
