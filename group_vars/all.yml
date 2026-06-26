@@ -21,7 +21,6 @@ system_packages:
   - duf  # Disk usage/free utility with a user-friendly interface
   - fd-find  # Simple, fast and user-friendly alternative to 'find' (required by neovim/lazyvim)
   - feroxbuster  # Fast, simple, recursive content discovery tool written in Rust
-  - firejail  # Sandboxing utility to restrict the running environment of untrusted applications
   - foremost  # File carving tool for recovering files based on their headers, footers, and internal data structures
   - fzf  # Command-line fuzzy finder
   - ghidra  # Software reverse engineering (SRE) framework
