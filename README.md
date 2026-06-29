@@ -141,10 +141,3 @@ Additional Git repos are cloned locally at the following locations:
 - [PortSwigger Web Security Academy](https://portswigger.net/web-security/all-materials)
 - [Recommended WiFi Adapters for Kali Linux](https://github.com/morrownr/USB-WiFi/blob/main/home/Recommended_Adapters_for_Kali_Linux.md)
 
----
-
-## Donations
-
-If you think my work helped you in some way and saved you time and effort, I’m happy to receive any amount of donation. However, the code in this repo is completely free.
-
-Bitcoin (BTC): `bc1qzlhpm94vtk2ht67etdutzcy2g5an5v6g36tp0m`
