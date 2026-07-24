@@ -423,21 +423,21 @@
 
     - name: Install VSCodium and some plugins
       block:
-        - name: Download VSCodium GPG key
-          ansible.builtin.get_url:
-            url: "{{ vscodium.apt_key_url }}"
-            dest: "{{ vscodium.apt_key_keyring }}"
-            mode: '0644'
-
-        - name: Add VSCodium repo
-          ansible.builtin.apt_repository:
-            repo: "{{ vscodium.repo }}"
+        - name: Add VSCodium repo (deb822 format)
+          ansible.builtin.deb822_repository:
+            name: "{{ vscodium.repo_filename }}"
+            types: deb
+            architectures: "{{ vscodium.architectures }}"
+            uris: "{{ vscodium.uris }}"
+            suites: "{{ vscodium.suites }}"
+            components: "{{ vscodium.components }}"
+            signed_by: "{{ vscodium.apt_key_url }}"
             state: present
-            filename: "{{ vscodium.repo_filename }}"
 
-        - name: Install the lastest version of VSCodium
+        - name: Install the latest version of VSCodium
           ansible.builtin.apt:
             name: "{{ vscodium.package }}"
+            update_cache: true
 
         - name: Install some VSCodium extensions
           ansible.builtin.command: "codium --install-extension {{ item }}"
