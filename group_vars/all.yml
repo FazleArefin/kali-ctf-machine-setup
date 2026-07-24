@@ -70,6 +70,7 @@ system_packages:
   - pcre2-utils  # Provides pcre2grep and pcre2test (perl-compatible regex)
   - pipx  # Install and run Python applications in isolated environments
   - python3-cachecontrol  # HTTP cache for Python requests
+  - python3-debian
   - python3-pip  # Python package installer
   - python3-poetry  # Python dependency management and packaging tool
   - python3-pwntools  # CTF framework and exploit development library
