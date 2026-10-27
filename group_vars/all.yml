@@ -16,6 +16,7 @@ system_packages:
   - cargo  # Rust language package manager and build tool
   - chisel  # Fast TCP/UDP tunnel, transported over HTTP, secured via SSH
   - chromium  # Open-source web browser project
+  - dalfox  # A powerful open-source XSS scanner
   - dconf-cli  # Command line tool for managing dconf settings
   - dotdotpwn  # Directory traversal fuzzer
   - duf  # Disk usage/free utility with a user-friendly interface
@@ -74,6 +75,7 @@ system_packages:
   - python3-pip  # Python package installer
   - python3-poetry  # Python dependency management and packaging tool
   - python3-pwntools  # CTF framework and exploit development library
+  - qsreplace  # Accept URLs on stdin, replace all query string values with a user-supplied value
   - realtek-rtl88xxau-dkms  # Realtek RTL88xxAU driver in DKMS format
   - ripgrep  # Recursively searches directories for a regex pattern
   - ropper # Tool to find gadgets in binaries
@@ -120,8 +122,6 @@ golang_tools:
   - github.com/tomnomnom/anew@latest  # Tool to add new lines to a file
   - github.com/lc/gau/v2/cmd/gau@latest  # Fetch known URLs from AlienVault's OTX, the Wayback Machine, and Common Crawl
   - github.com/tomnomnom/waybackurls@latest  # Tool to fetch all the URLs that the Wayback Machine has archived for a given domain
-  - github.com/hahwul/dalfox/v2@latest  # Fast and powerful XSS scanner
-  - github.com/tomnomnom/qsreplace@latest  # Tool to replace query string parameters with custom values
   - github.com/jaeles-project/jaeles@latest  # Modular web scanner written in Go
 
 # nerd fonts from https://github.com/ryanoasis/nerd-fonts
