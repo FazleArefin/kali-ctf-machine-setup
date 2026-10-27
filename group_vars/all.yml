@@ -105,7 +105,6 @@ system_packages:
 pipx_packages:
   - ruff  # Python linter and formatter
   - chepy  # Python lib/cli equivalent of the awesome CyberChef tool
-  - cai-framework  # build and deploy AI-powered offensive and defensive automation
   - checkov  # Static code analysis tool for security vulnerabilities
   - prowler  # AWS security best practices assessment tool
   - scoutsuite  # Multi-cloud security-auditing tool
