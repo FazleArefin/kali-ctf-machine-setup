@@ -140,4 +140,3 @@ Additional Git repos are cloned locally at the following locations:
 - [h4cker](https://github.com/The-Art-of-Hacking/h4cker)
 - [PortSwigger Web Security Academy](https://portswigger.net/web-security/all-materials)
 - [Recommended WiFi Adapters for Kali Linux](https://github.com/morrownr/USB-WiFi/blob/main/home/Recommended_Adapters_for_Kali_Linux.md)
-
