@@ -183,7 +183,7 @@ vscodium:
     - vscodevim.vim
     - ms-python.python
     - oderwat.indent-rainbow
-    - rangav.vscode-thunder-client
+    - humao.rest-client
     - rust-lang.rust-analyzer
     - golang.Go
     - timonwong.shellcheck
