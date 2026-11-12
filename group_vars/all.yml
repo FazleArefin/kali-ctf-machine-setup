@@ -151,12 +151,6 @@ nerd_fonts:
   - "{{ nerd_fonts_base_url }}/SourceCodePro/SauceCodeProNerdFontMono-Italic.ttf"
   - "{{ nerd_fonts_base_url }}/SourceCodePro/SauceCodeProNerdFontMono-Regular.ttf"
 
-  # VictorMono
-  - "{{ nerd_fonts_base_url }}/VictorMono/VictorMonoNerdFontMono-BoldItalic.ttf"
-  - "{{ nerd_fonts_base_url }}/VictorMono/VictorMonoNerdFontMono-Bold.ttf"
-  - "{{ nerd_fonts_base_url }}/VictorMono/VictorMonoNerdFontMono-Italic.ttf"
-  - "{{ nerd_fonts_base_url }}/VictorMono/VictorMonoNerdFontMono-Regular.ttf"
-
 projectdiscovery_tools:
   - pdtm  # ProjectDiscovery Tool Manager - manages installation and updates of ProjectDiscovery tools
   - nuclei  # Fast and customizable vulnerability scanner based on templates
