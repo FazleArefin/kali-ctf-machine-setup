@@ -73,7 +73,7 @@ mods = "Control"
 [[keyboard.bindings]]
 action = "IncreaseFontSize"
 key = "Plus"
-mods = "Control"
+mods = "Control|Shift"
 
 [[keyboard.bindings]]
 action = "DecreaseFontSize"
