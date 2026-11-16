@@ -128,10 +128,10 @@ nerd_fonts_version: v3.5.1  # TODO: bump up version number as newer versions are
 nerd_fonts_base_url: "https://github.com/ryanoasis/nerd-fonts/raw/{{ nerd_fonts_version }}/patched-fonts"
 nerd_fonts:
   # CascadiaCode
-  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFontMono-BoldItalic.ttf"  # don't remove; alacritty config uses this
-  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFontMono-Bold.ttf"        # don't remove; alacritty config uses this
-  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFontMono-Italic.ttf"      # don't remove; alacritty config uses this
-  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFontMono-Regular.ttf"     # don't remove; alacritty config uses this
+  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFont-BoldItalic.ttf"  # don't remove; alacritty config uses this
+  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFont-Bold.ttf"        # don't remove; alacritty config uses this
+  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFont-Italic.ttf"      # don't remove; alacritty config uses this
+  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFont-Regular.ttf"     # don't remove; alacritty config uses this
 
   # JetBrainsMono (Ligatures)
   - "{{ nerd_fonts_base_url }}/JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-BoldItalic.ttf"

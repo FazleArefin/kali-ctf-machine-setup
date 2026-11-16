@@ -20,19 +20,19 @@ y = 10
 size = 10
 
 [font.normal]
-family = "CaskaydiaCove Nerd Font Mono"
+family = "CaskaydiaCove Nerd Font"
 style = "Regular"
 
 [font.bold]
-family = "CaskaydiaCove Nerd Font Mono"
+family = "CaskaydiaCove Nerd Font"
 style = "Bold"
 
 [font.italic]
-family = "CaskaydiaCove Nerd Font Mono"
+family = "CaskaydiaCove Nerd Font"
 style = "Italic"
 
 [font.bold_italic]
-family = "CaskaydiaCove Nerd Font Mono"
+family = "CaskaydiaCove Nerd Font"
 style = "Bold Italic"
 
 [font.offset]
