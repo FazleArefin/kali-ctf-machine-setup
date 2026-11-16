@@ -153,7 +153,7 @@
           become_user: "{{ local_username }}"
 
         - name: Install all required tmux plugins
-          ansible.builtin.shell: "/home/{{local_username}}/.tmux/plugins/tpm/scripts/install_plugins.sh"
+          ansible.builtin.shell: "/home/{{ local_username }}/.tmux/plugins/tpm/scripts/install_plugins.sh"
           become: true
           become_user: "{{ local_username }}"
 
