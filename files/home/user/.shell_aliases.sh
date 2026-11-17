@@ -4,7 +4,7 @@
 [[ $- != *i* ]] && return
 
 # Flush file system buffers with 'sync' and drop cached data from memory
-alias clear_cache="/usr/bin/sudo sh -c 'sync && echo 1 > /proc/sys/vm/drop_caches'"
+alias drop_caches='/usr/bin/sudo sh -c "sync && echo 3 > /proc/sys/vm/drop_caches && echo Caches cleared"'
 
 alias my_public_ipv4='dig @resolver1.opendns.com A myip.opendns.com +short -4'
 alias my_public_ipv6='dig @resolver1.opendns.com AAAA myip.opendns.com +short -6'
