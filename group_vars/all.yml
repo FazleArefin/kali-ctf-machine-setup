@@ -20,6 +20,7 @@ system_packages:
   - dconf-cli  # Command line tool for managing dconf settings
   - dotdotpwn  # Directory traversal fuzzer
   - duf  # Disk usage/free utility with a user-friendly interface
+  - eza  # Modern replacement for ls
   - fd-find  # Simple, fast and user-friendly alternative to 'find' (required by neovim/lazyvim)
   - feroxbuster  # Fast, simple, recursive content discovery tool written in Rust
   - foremost  # File carving tool for recovering files based on their headers, footers, and internal data structures
@@ -44,7 +45,6 @@ system_packages:
   - libpcap-dev  # Development library for packet capture (required for naabu)
   - ligolo-ng  # Advanced tunneling/pivoting tool using a TUN interface
   - linux-exploit-suggester  # Linux privilege escalation auditing tool
-  - lsd  # Modern replacement for 'ls' command
   - luarocks  # Package manager for Lua modules (required by neovim/lazyvim)
   - maltego  # Interactive data mining tool for link analysis and data visualization
   - massdns  # High-performance DNS stub resolver for bulk lookups and reconnaissance

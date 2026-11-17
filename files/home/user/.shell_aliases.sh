@@ -24,13 +24,31 @@ alias proxy_tor_on='export http_proxy=socks5h://localhost:9050; export https_pro
 alias proxy_status="env | grep -i 'http_proxy\|https_proxy'"
 alias proxy_off='unset http_proxy; unset https_proxy'
 
-# Changing "ls" to "lsd"
-alias ls='lsd --color=auto --group-directories-first'
-alias l.='lsd --color=auto --group-directories-first -a | egrep "^\."' # show only dotfiles
-alias l1='lsd -1 -a --color=auto --group-directories-first'             # Single column output
-alias ll='lsd -al --color=auto --group-directories-first'  # long format
-alias lss='lsd -a -1 --color=auto --group-directories-first --sort=size'
-alias lsm='lsd -a -1 --color=auto --group-directories-first --sort=time'
-alias lst='lsd -a --tree --color=auto --group-directories-first' # tree listing
-alias lsi='lsd -lah --color=auto --group-directories-first --icon=always'
-alias lsg='lsd -lah --color=auto --group-directories-first --git' # Show git status in file listings
+# ---- eza aliases: begin ----
+
+# Everyday listing
+# alias ls='eza --group-directories-first --icons=never'  # left off so plain ls stays untouched
+alias l.='eza -d .[!.]* --icons=never'                                        # only dotfiles
+alias l1='eza -1a --group-directories-first --icons=never'                    # single column
+alias ll='eza -l --header --smart-group --time-style=relative --group-directories-first --icons=never'
+alias la='ll -a'                                                             # long format incl. hidden
+
+# Sorting
+alias lss='eza -a1 --group-directories-first --icons=never --sort=size --reverse'      # largest first
+alias lsm='eza -a1 --group-directories-first --icons=never --sort=modified --reverse'  # newest first
+alias lrecent='eza -l --header --sort=modified --time-style=relative'                 # newest at bottom
+alias lchanged='eza -la --header --changed --sort=changed --reverse --group-directories-first' # newest ctime first
+alias lstype='eza -la --sort=type --group-directories-first --icons=never'             # sort by file type
+
+# Trees (depth-limited)
+alias lst='eza -aT -L 5 -I .git --group-directories-first --icons=never'                    # full tree, 5 levels
+alias lt='eza -lT -L 3 -I .git --group-directories-first --icons=never'                     # long tree, 3 levels
+alias ltdev="eza -aT -L 4 -I '.git|.hg|.svn|node_modules|vendor|.venv|venv|__pycache__|*.pyc|.pytest_cache|.mypy_cache|.ruff_cache|.tox|.nox|.coverage|htmlcov|*.egg-info|.eggs|.ipynb_checkpoints|dist|build|target|.bundle|.yardoc|CMakeFiles|CMakeCache.txt|cmake-build-*|compile_commands.json|*.o|*.a|*.so|*.obj|.cache|.next|.nuxt|.output|coverage|.turbo|.parcel-cache|.pnpm-store|.svelte-kit|.angular|.terraform|.gradle|.DS_Store' --group-directories-first --icons=never" # development tree, excludes generated directories
+
+# Ops (metadata only)
+alias lsec='eza -l --header -Z -o --smart-group --no-time'                  # perms, octal modes, SELinux
+alias luid='eza -ln --header --group-directories-first'                     # numeric UID/GID
+alias lino='eza -li --header'                                               # inode numbers
+alias lm='eza -lM --header --icons=never'                                    # mount information
+
+# ---- eza aliases: end ----
