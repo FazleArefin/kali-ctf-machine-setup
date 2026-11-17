@@ -46,7 +46,6 @@ alias lt='eza -lT -L 3 -I .git --group-directories-first --icons=never'         
 alias ltdev="eza -aT -L 4 -I '.git|.hg|.svn|node_modules|vendor|.venv|venv|__pycache__|*.pyc|.pytest_cache|.mypy_cache|.ruff_cache|.tox|.nox|.coverage|htmlcov|*.egg-info|.eggs|.ipynb_checkpoints|dist|build|target|.bundle|.yardoc|CMakeFiles|CMakeCache.txt|cmake-build-*|compile_commands.json|*.o|*.a|*.so|*.obj|.cache|.next|.nuxt|.output|coverage|.turbo|.parcel-cache|.pnpm-store|.svelte-kit|.angular|.terraform|.gradle|.DS_Store' --group-directories-first --icons=never" # development tree, excludes generated directories
 
 # Ops (metadata only)
-alias lsec='eza -l --header -Z -o --smart-group --no-time'                  # perms, octal modes, SELinux
 alias luid='eza -ln --header --group-directories-first'                     # numeric UID/GID
 alias lino='eza -li --header'                                               # inode numbers
 alias lm='eza -lM --header --icons=never'                                    # mount information
