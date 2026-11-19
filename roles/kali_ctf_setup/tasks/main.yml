@@ -332,7 +332,7 @@
     - name: Install all other projectdiscovery.io tools
       ansible.builtin.shell:
         cmd: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -i {{ item }}"
-        creates: "/home/{{ local_username }}/.pdtm/go/bin/{{item}}"
+        creates: "/home/{{ local_username }}/.pdtm/go/bin/{{ item }}"
       with_items: "{{ projectdiscovery_tools }}"
 
     - name: Update all projectdiscovery.io tools
@@ -431,7 +431,7 @@
       become: true
       become_user: "{{ local_username }}"
 
-- name: build and install rust binaries using cargo
+- name: Build and install Rust binaries using cargo
   community.general.cargo:
     name: "{{ item }}"
     locked: true
@@ -440,7 +440,7 @@
   become: true
   become_user: "{{ local_username }}"
 
-- name: build and install golang binaries
+- name: Build and install Go binaries
   ansible.builtin.command: "go install {{ item }}"
   with_items: "{{ golang_tools }}"
   become: true
@@ -457,6 +457,8 @@
   become_user: "{{ local_username }}"
 
 - name: Setup alacritty
+  become: true
+  become_user: "{{ local_username }}"
   block:
     - name: Create alacritty config directory
       ansible.builtin.file:
@@ -471,22 +473,23 @@
         repo: "{{ alacritty_themes_repo }}"
         dest: "~{{ local_username }}/.config/alacritty/themes"
         clone: true
+        version: master
 
     - name: Copy sample alacritty config file
       ansible.builtin.copy:
         src: home/user/.config/alacritty/alacritty.toml
         dest: "/home/{{ local_username }}/.config/alacritty/alacritty.toml"
         mode: '0644'
+
+- name: Set up Neovim starter configuration
   become: true
   become_user: "{{ local_username }}"
-
-- block:
+  block:
     - name: Clone lazyvim starter git repo
       ansible.builtin.git:
         repo: "{{ lazyvim_starter_url }}"
         dest: "/home/{{ local_username }}/.config/nvim"
-  become: true
-  become_user: "{{ local_username }}"
+        version: main
 
 - name: Initialize zoxide and fzf in zsh shell
   become: true
