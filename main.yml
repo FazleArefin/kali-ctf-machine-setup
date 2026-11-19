@@ -110,11 +110,7 @@
             owner: root
             group: root
             remote_src: true
-          register: mitmproxy_ca_copy
-
-        - name: Update CA certificates
-          ansible.builtin.command: update-ca-certificates
-          when: mitmproxy_ca_copy.changed
+          notify: Update CA certificates
 
     - name: Setup tmux
       block:
@@ -528,3 +524,7 @@
           ansible.builtin.apt:
             autoremove: true
             autoclean: true
+
+  handlers:
+    - name: Import handlers
+      ansible.builtin.import_tasks: handlers/main.yml
