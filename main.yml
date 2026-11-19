@@ -23,34 +23,23 @@
         pkg: "{{ system_packages }}"
         state: present
 
-    # pipx binaries break when python verison is upgraded, hence all the cleanup
+    # pipx binaries break when Python is upgraded, so rebuild every package
+    # against the current interpreter. pipx uninstall-all removes only pipx's
+    # own venvs and shims, leaving anything else in ~/.local/bin untouched.
     - name: Install pipx packages
       become: true
       become_user: "{{ local_username }}"
       block:
-        - name: Remove pipx and bin directory
-          ansible.builtin.file:
-            path: "{{ item }}"
-            state: absent
-            force: true
-          with_items:
-            - "/home/{{ local_username }}/.local/share/pipx"
-            - "/home/{{ local_username }}/.local/bin"
-
-        - name: Ensure pipx directories exist again
-          ansible.builtin.file:
-            path: "/home/{{ local_username }}/.local/bin"
-            state: directory
-            mode: '0755'
+        - name: Remove pipx-managed packages for a clean rebuild
+          ansible.builtin.command: pipx uninstall-all
+          register: pipx_uninstall_all
+          changed_when: pipx_uninstall_all.stdout | trim | length > 0
 
         - name: Install the pipx packages
           community.general.pipx:
             name: "{{ item }}"
+            python: /usr/bin/python3
           loop: "{{ pipx_packages }}"
-
-        - name: Reinstall all pipx packages to align with current Python version
-          ansible.builtin.command: "pipx reinstall-all --verbose"
-          changed_when: false
 
     - name: Process wordlists
       block:
