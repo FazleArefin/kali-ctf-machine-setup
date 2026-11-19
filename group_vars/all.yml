@@ -81,6 +81,7 @@ system_packages:
   - ropper # Tool to find gadgets in binaries
   - rlwrap  # Readline wrapper for command line interfaces
   - ruff  # Python linter and formatter
+  - rustscan  # Fast port scanner built in Rust
   - seclists  # Collection of multiple types of lists used during security assessments
   - sherlock  # Tool to find usernames across social networks
   - sshuttle  # Transparent proxy server for VPN-like functionality
@@ -114,7 +115,6 @@ pipx_packages:
 cargo_packages:
   - uv  # python packge and project manager
   - tlrc  # Official tldr rust client
-  - rustscan  # Fast port scanner built in Rust
 
 golang_tools:
   - github.com/wagoodman/dive@latest  # Tool for exploring each layer in a docker image
