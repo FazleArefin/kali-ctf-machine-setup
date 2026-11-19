@@ -153,9 +153,7 @@
         dest: "/home/{{ local_username }}/.local/share/fonts/"
         mode: '0644'
       with_items: "{{ nerd_fonts }}"
-
-    - name: Refresh fonts cache
-      ansible.builtin.shell: "fc-cache -fv"
+      notify: Refresh fonts cache
 
 - name: "Enable passwordless sudo for user {{ local_username }}"
   ansible.builtin.user:
