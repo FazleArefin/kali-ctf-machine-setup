@@ -12,8 +12,6 @@ alias my_public_ipv6='dig @resolver1.opendns.com AAAA myip.opendns.com +short -6
 # pipe text output to clipboard (can be pasted using Ctrl v)
 alias clipboard='xsel -ib'
 
-alias upgrade_system_packages='/usr/bin/sudo apt clean && /usr/bin/sudo apt update && /usr/bin/sudo apt upgrade -y && /usr/bin/sudo apt autoremove --purge -y && /usr/bin/sudo apt clean'
-
 # sudo with preserved user's PATH
 # ## this is useful when running commands with elevated priviledges with the executable in the user's home directory
 alias sudo_keep_path='sudo env "PATH=$PATH"'
