@@ -379,12 +379,18 @@
             state: directory
             mode: '0700'
 
-        - name: Generate SSH key pair
+        - name: Generate RSA SSH key pair
           community.crypto.openssh_keypair:
             state: present
             type: rsa
             size: 4096
             path: "/home/{{ local_username }}/.ssh/id_rsa"
+
+        - name: Generate Ed25519 SSH key pair
+          community.crypto.openssh_keypair:
+            state: present
+            type: ed25519
+            path: "/home/{{ local_username }}/.ssh/id_ed25519"
 
     - name: Setup custom shell aliases and functions
       become: true
