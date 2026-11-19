@@ -305,7 +305,11 @@
 
     - name: Extract download URL for pdtm
       ansible.builtin.set_fact:
-        kali_ctf_setup_pdtm_download_url: "{{ kali_ctf_setup_pdtm_latest_release.json.assets | selectattr('name', 'match', '^pdtm_' ~ kali_ctf_setup_pdtm_version ~ '_linux_' ~ kali_ctf_setup_cpu_arch ~ '.zip$') | map(attribute='browser_download_url') | first }}"
+        kali_ctf_setup_pdtm_download_url: >-
+          {{ kali_ctf_setup_pdtm_latest_release.json.assets
+             | selectattr('name', 'match', '^pdtm_' ~ kali_ctf_setup_pdtm_version ~ '_linux_' ~ kali_ctf_setup_cpu_arch ~ '.zip$')
+             | map(attribute='browser_download_url')
+             | first }}
 
     - name: Download pdtm file
       ansible.builtin.get_url:
