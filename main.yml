@@ -367,7 +367,8 @@
 
               # pipx binaries
               export PATH="$PATH:/home/{{ local_username }}/.local/bin"
-            create: false
+            create: true
+            mode: '0644'
 
     - name: Generate ssh keys
       become: true
@@ -414,7 +415,8 @@
               [[ -f ~/.shell_aliases.sh ]] && source ~/.shell_aliases.sh
               [[ -f ~/.shell_functions.sh ]] && source ~/.shell_functions.sh
               [[ -f ~/.shell_variables.sh ]] && source ~/.shell_variables.sh
-            create: false
+            create: true
+            mode: '0644'
 
     - name: Install VSCodium and some plugins
       block:
@@ -497,23 +499,20 @@
       become: true
       become_user: "{{ local_username }}"
 
-    - name: Initialize zoxide in zsh shell
-      ansible.builtin.lineinfile:
+    - name: Initialize zoxide and fzf in zsh shell
+      become: true
+      become_user: "{{ local_username }}"
+      ansible.builtin.blockinfile:
         path: "/home/{{ local_username }}/.zshrc"
-        line: "{{ item }}"
-      with_items:
-        - ""
-        - "# initialize zoxide"
-        - eval "$(zoxide init zsh)"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - shell tool init"
+        block: |
+          # initialize zoxide
+          eval "$(zoxide init zsh)"
 
-    - name: Initialize fzf in zsh shell
-      ansible.builtin.lineinfile:
-        path: "/home/{{ local_username }}/.zshrc"
-        line: "{{ item }}"
-      with_items:
-        - ""
-        - "# Set up fzf key bindings and fuzzy completion"
-        - source <(fzf --zsh)
+          # Set up fzf key bindings and fuzzy completion
+          source <(fzf --zsh)
+        create: true
+        mode: '0644'
 
     # Fix for bat syntax highlighting tool; Debian packages it as batcat instead of just bat
     - name: Create symlink for bat
