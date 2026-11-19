@@ -140,9 +140,9 @@ pipx_packages:
   - scoutsuite  # Multi-cloud security-auditing tool
   - volatility3  # Advanced memory forensics framework
   - maigret  # OSINT tool to search for usernames across hundreds of platforms
+  - uv  # Python package and project manager
 
 cargo_packages:
-  - uv  # python packge and project manager
   - tlrc  # Official tldr rust client
 
 golang_tools:
