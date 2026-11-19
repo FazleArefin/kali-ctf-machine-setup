@@ -135,8 +135,11 @@
 
     - name: Install all required tmux plugins
       ansible.builtin.command:
-        cmd: "/home/{{ local_username }}/.tmux/plugins/tpm/scripts/install_plugins.sh"
-        creates: "/home/{{ local_username }}/.tmux/plugins/tmux-sensible"
+        cmd: >-
+          {{ '/home/' ~ local_username
+             ~ '/.tmux/plugins/tpm/scripts/install_plugins.sh' }}
+        creates: >-
+          /home/{{ local_username }}/.tmux/plugins/tmux-sensible
       become: true
       become_user: "{{ local_username }}"
 
@@ -152,7 +155,7 @@
 
     - name: Download nerd fonts to local fonts folder
       ansible.builtin.get_url:
-        url: "{{ item }}"
+        url: "{{ nerd_fonts_base_url }}/{{ item }}"
         dest: "/home/{{ local_username }}/.local/share/fonts/"
         mode: '0644'
       with_items: "{{ nerd_fonts }}"
@@ -224,7 +227,8 @@
         update: true
         force: true
 
-    - name: Git clone vulhub  # Pre-Built Vulnerable Environments Based on Docker-Compose
+    # Pre-Built Vulnerable Environments Based on Docker-Compose
+    - name: Git clone vulhub
       ansible.builtin.git:
         repo: 'https://github.com/vulhub/vulhub.git'
         dest: /opt/vulhub
@@ -264,8 +268,12 @@
         source: pull
         force_source: true
       loop:
-        - webgoat/webgoat          # docker run --rm -it -p 127.0.0.1:8080:8080 -p 127.0.0.1:9090:9090 -e TZ=UTC --name webgoat webgoat/webgoat
-        - bkimminich/juice-shop    # docker run --rm -d -p 3000:3000 --name juice-shop bkimminich/juice-shop
+        # docker run --rm -it -p 127.0.0.1:8080:8080 -p 127.0.0.1:9090:9090
+        #   -e TZ=UTC --name webgoat webgoat/webgoat
+        - webgoat/webgoat
+        # docker run --rm -d -p 3000:3000 --name juice-shop
+        # bkimminich/juice-shop
+        - bkimminich/juice-shop
 
     - name: Install DVWA package
       ansible.builtin.apt:
@@ -304,13 +312,17 @@
 
     - name: Extract pdtm version from the latest release URL
       ansible.builtin.set_fact:
-        kali_ctf_setup_pdtm_version: "{{ kali_ctf_setup_pdtm_latest_release.json.tag_name | regex_replace('^v', '') }}"
+        kali_ctf_setup_pdtm_version: >-
+          {{ kali_ctf_setup_pdtm_latest_release.json.tag_name
+             | regex_replace('^v', '') }}
 
     - name: Extract download URL for pdtm
       ansible.builtin.set_fact:
         kali_ctf_setup_pdtm_download_url: >-
           {{ kali_ctf_setup_pdtm_latest_release.json.assets
-             | selectattr('name', 'match', '^pdtm_' ~ kali_ctf_setup_pdtm_version ~ '_linux_' ~ kali_ctf_setup_cpu_arch ~ '.zip$')
+             | selectattr('name', 'match',
+                          '^pdtm_' ~ kali_ctf_setup_pdtm_version
+                          ~ '_linux_' ~ kali_ctf_setup_cpu_arch ~ '.zip$')
              | map(attribute='browser_download_url')
              | first }}
 
@@ -318,11 +330,15 @@
       ansible.builtin.get_url:
         url: "{{ kali_ctf_setup_pdtm_download_url }}"
         mode: '0644'
-        dest: "/tmp/projectdiscovery/pdtm_{{ kali_ctf_setup_pdtm_version }}_linux_{{ kali_ctf_setup_cpu_arch }}.zip"
+        dest: >-
+          {{ '/tmp/projectdiscovery/pdtm_' ~ kali_ctf_setup_pdtm_version
+             ~ '_linux_' ~ kali_ctf_setup_cpu_arch ~ '.zip' }}
 
     - name: Unzip pdtm file
       ansible.builtin.unarchive:
-        src: "/tmp/projectdiscovery/pdtm_{{ kali_ctf_setup_pdtm_version }}_linux_{{ kali_ctf_setup_cpu_arch }}.zip"
+        src: >-
+          {{ '/tmp/projectdiscovery/pdtm_' ~ kali_ctf_setup_pdtm_version
+             ~ '_linux_' ~ kali_ctf_setup_cpu_arch ~ '.zip' }}
         dest: /tmp/projectdiscovery
         remote_src: true
 
@@ -344,7 +360,8 @@
       with_items: "{{ projectdiscovery_tools }}"
 
     - name: Update all projectdiscovery.io tools
-      ansible.builtin.command: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -update-all"
+      ansible.builtin.command: >-
+        /home/{{ local_username }}/.pdtm/go/bin/pdtm -update-all
       changed_when: true
 
 - name: Setup some essential paths
@@ -407,7 +424,8 @@
     - name: Include .shell_*.sh files in .zshrc
       ansible.builtin.blockinfile:
         path: "/home/{{ local_username }}/.zshrc"
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - extra shell functions and aliases"
+        marker: >-
+          # {mark} ANSIBLE MANAGED BLOCK - extra shell functions and aliases
         block: |
           [[ -f ~/.shell_aliases.sh ]] && source ~/.shell_aliases.sh
           [[ -f ~/.shell_functions.sh ]] && source ~/.shell_functions.sh
@@ -437,7 +455,10 @@
     - name: Install some VSCodium extensions
       ansible.builtin.command: "codium --install-extension {{ item }}"
       register: kali_ctf_setup_codium_extension
-      changed_when: "'successfully installed' in (kali_ctf_setup_codium_extension.stdout + kali_ctf_setup_codium_extension.stderr)"
+      changed_when: >-
+        'successfully installed' in
+        (kali_ctf_setup_codium_extension.stdout +
+         kali_ctf_setup_codium_extension.stderr)
       with_items: "{{ vscodium.extensions }}"
       become: true
       become_user: "{{ local_username }}"
@@ -523,7 +544,8 @@
     create: true
     mode: '0644'
 
-# Fix for bat syntax highlighting tool; Debian packages it as batcat instead of just bat
+# Fix for bat syntax highlighting tool; Debian packages it as batcat instead
+# of just bat
 - name: Create symlink for bat
   ansible.builtin.file:
     src: /usr/bin/batcat
