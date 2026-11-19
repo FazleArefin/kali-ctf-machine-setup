@@ -83,7 +83,7 @@ kali-tweaks
 #### OWASP Juice Shop
 
 ```zsh
-docker run --rm -d -p 3000:3000 --name juice-shop bkimminich/juice-shop
+docker run --rm -d -p 127.0.0.1:3000:3000 --name juice-shop bkimminich/juice-shop
 # Use a web browser to go to http://localhost:3000 in the Kali host
 ```
 
