@@ -134,7 +134,9 @@
       become_user: "{{ local_username }}"
 
     - name: Install all required tmux plugins
-      ansible.builtin.shell: "/home/{{ local_username }}/.tmux/plugins/tpm/scripts/install_plugins.sh"
+      ansible.builtin.command:
+        cmd: "/home/{{ local_username }}/.tmux/plugins/tpm/scripts/install_plugins.sh"
+        creates: "/home/{{ local_username }}/.tmux/plugins/tmux-sensible"
       become: true
       become_user: "{{ local_username }}"
 
@@ -269,10 +271,10 @@
       ansible.builtin.apt:
         pkg:
           - dvwa
-    # start the service using `sudo systemctl start dvwa`
-    # navigate to http://localhost:42001
-    # default creds are admin/password
-    # Security Level can be changed in /etc/dvwa/config/config.inc.php
+          # start the service using `sudo systemctl start dvwa`
+          # navigate to http://localhost:42001
+          # default creds are admin/password
+          # Security Level can be changed in /etc/dvwa/config/config.inc.php
 
 
 - name: Install projectdiscovery.io OSS tools
@@ -324,10 +326,11 @@
         dest: /tmp/projectdiscovery
         remote_src: true
 
+    # Also appends ~/.pdtm/go/bin to PATH in ~/.zshrc
     - name: Execute pdtm file
-      ansible.builtin.shell:
-        cmd: "/tmp/projectdiscovery/pdtm -i pdtm"  # this will set PATH to ~/.pdtm/go/bin in ~/.zshrc and also install pdtm in ~/.pdtm/go/bin
-        creates: "~{{ local_username }}/.pdtm/go/bin/pdtm"
+      ansible.builtin.command:
+        cmd: "/tmp/projectdiscovery/pdtm -i pdtm"
+        creates: "/home/{{ local_username }}/.pdtm/go/bin/pdtm"
 
     - name: Remove projectdiscovery.io temporary download directory
       ansible.builtin.file:
@@ -335,14 +338,14 @@
         state: absent
 
     - name: Install all other projectdiscovery.io tools
-      ansible.builtin.shell:
+      ansible.builtin.command:
         cmd: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -i {{ item }}"
         creates: "/home/{{ local_username }}/.pdtm/go/bin/{{ item }}"
       with_items: "{{ projectdiscovery_tools }}"
 
     - name: Update all projectdiscovery.io tools
-      ansible.builtin.shell:
-        cmd: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -update-all"
+      ansible.builtin.command: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -update-all"
+      changed_when: true
 
 - name: Setup some essential paths
   become: true
@@ -433,6 +436,8 @@
 
     - name: Install some VSCodium extensions
       ansible.builtin.command: "codium --install-extension {{ item }}"
+      register: kali_ctf_setup_codium_extension
+      changed_when: "'successfully installed' in (kali_ctf_setup_codium_extension.stdout + kali_ctf_setup_codium_extension.stderr)"
       with_items: "{{ vscodium.extensions }}"
       become: true
       become_user: "{{ local_username }}"
@@ -448,6 +453,7 @@
 
 - name: Build and install Go binaries
   ansible.builtin.command: "go install {{ item }}"
+  changed_when: true
   with_items: "{{ golang_tools }}"
   become: true
   become_user: "{{ local_username }}"
@@ -457,8 +463,13 @@
     name: Etc/UTC
 
 - name: Get an offline copy of all tldr pages
-  ansible.builtin.shell: |
-    /bin/zsh -i -c 'tldr --update'
+  ansible.builtin.command:
+    argv:
+      - /bin/zsh
+      - -i
+      - -c
+      - tldr --update
+  changed_when: true
   become: true
   become_user: "{{ local_username }}"
 
