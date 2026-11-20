@@ -1,0 +1,11 @@
+---
+- name: Update CA certificates
+  become: true
+  ansible.builtin.command: update-ca-certificates
+  changed_when: false
+
+- name: Refresh fonts cache
+  become: true
+  become_user: "{{ local_username }}"
+  ansible.builtin.command: fc-cache -fv
+  changed_when: false

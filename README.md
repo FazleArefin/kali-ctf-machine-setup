@@ -21,19 +21,11 @@ sudo apt update
 sudo apt full-upgrade -y
 ```
 
-### 2. Install git and ansible/ansible-core
+### 2. Install git and ansible
 
 ```zsh
 sudo apt update
 sudo apt install git ansible -y
-
-# Only if the ansible package is NOT available, install ansible-core and the required collections below
-sudo apt install ansible-core -y
-# Install the additional ansible collections (do not use `sudo` here)
-ansible-galaxy collection install ansible.posix \
-  community.general \
-  community.docker \
-  community.crypto
 ```
 
 ### 3. Clone this repo
@@ -83,7 +75,7 @@ kali-tweaks
 #### OWASP Juice Shop
 
 ```zsh
-docker run --rm -d -p 3000:3000 --name juice-shop bkimminich/juice-shop
+docker run --rm -d -p 127.0.0.1:3000:3000 --name juice-shop bkimminich/juice-shop
 # Use a web browser to go to http://localhost:3000 in the Kali host
 ```
 

@@ -1,17 +1,22 @@
 ---
 
-local_username: "{{ lookup('env', 'USER') }}"   # Override via: -e "local_username=$(id -un)"
+# Override via: -e "local_username=$(id -un)"
+local_username: "{{ lookup('env', 'USER') }}"
 setup_vuln_docker_images: false
 
 system_packages:
   - alacritty  # GPU-accelerated terminal emulator
   - amass  # In-depth DNS enumeration and attack surface mapping tool
-  - arjun # HTTP parameter discovery suite
+  - arjun  # HTTP parameter discovery suite
   - autorecon  # Automated reconnaissance tool
   - bat  # cat clone with syntax highlighting and Git integration
-  - bettercap  # Powerful, flexible and portable network attack and monitoring tool
-  - btop  # Resource monitor that shows usage and stats for processor, memory, disks, network and processes
-  - burpsuite  # Integrated platform for performing security testing of web applications
+  # Powerful, flexible and portable network attack and monitoring tool
+  - bettercap
+  # Resource monitor that shows usage and stats for processor, memory, disks,
+  # network and processes
+  - btop
+  # Integrated platform for performing security testing of web applications
+  - burpsuite
   - caido  # Web security auditing toolkit
   - cargo  # Rust language package manager and build tool
   - chisel  # Fast TCP/UDP tunnel, transported over HTTP, secured via SSH
@@ -21,24 +26,34 @@ system_packages:
   - dotdotpwn  # Directory traversal fuzzer
   - duf  # Disk usage/free utility with a user-friendly interface
   - eza  # Modern replacement for ls
-  - fd-find  # Simple, fast and user-friendly alternative to 'find' (required by neovim/lazyvim)
-  - feroxbuster  # Fast, simple, recursive content discovery tool written in Rust
-  - foremost  # File carving tool for recovering files based on their headers, footers, and internal data structures
+  # Simple, fast and user-friendly alternative to 'find' (required by
+  # neovim/lazyvim)
+  - fd-find
+  # Fast, simple, recursive content discovery tool written in Rust
+  - feroxbuster
+  # File carving tool for recovering files based on their headers, footers, and
+  # internal data structures
+  - foremost
   - fzf  # Command-line fuzzy finder
   - ghidra  # Software reverse engineering (SRE) framework
   - git  # Distributed version control system
-  - git-extras  # GIT utilities -- repo summary, repl, changelog population, author commit percentages and more
+  # GIT utilities -- repo summary, repl, changelog population, author commit
+  # percentages and more
+  - git-extras
   - glow  # Terminal markdown reader
   - gobuster  # Directory/file, DNS and VHost busting tool written in Go
   - golang-go  # Go programming language compiler and tools
-  - hakrawler  # Fast web crawler designed for easy and quick enumeration of URLs and assets
+  # Fast web crawler designed for easy and quick enumeration of URLs and assets
+  - hakrawler
   - hashrat  # Hashing tool for files and data streams
   - hcxtools  # Tools for capturing and converting wireless packets
   - hexstrike-ai  # AI-Powered MCP Cybersecurity Automation Platform
   - hping3  # Network tool for packet generation and analysis
   - httpie  # Command line HTTP client, user-friendly cURL replacement
   - imagemagick  # Software suite to create, edit, compose, or convert images
-  - iperf3  # Tool for active measurements of the maximum achievable bandwidth on IP networks
+  # Tool for active measurements of the maximum achievable bandwidth on IP
+  # networks
+  - iperf3
   - jq  # Command-line JSON processor
   - kali-tools-top10  # Metapackage for Kali's top 10 security tools
   - lazygit  # Simple terminal UI for git commands
@@ -46,8 +61,10 @@ system_packages:
   - ligolo-ng  # Advanced tunneling/pivoting tool using a TUN interface
   - linux-exploit-suggester  # Linux privilege escalation auditing tool
   - luarocks  # Package manager for Lua modules (required by neovim/lazyvim)
-  - maltego  # Interactive data mining tool for link analysis and data visualization
-  - massdns  # High-performance DNS stub resolver for bulk lookups and reconnaissance
+  # Interactive data mining tool for link analysis and data visualization
+  - maltego
+  # High-performance DNS stub resolver for bulk lookups and reconnaissance
+  - massdns
   - mat2  # Metadata removal tool for various file formats
   - mcp-kali-server  # API bridge conneccting MCP clients to the API server
   - mdk4  # Wi-Fi testing tool for security and robustness
@@ -56,18 +73,22 @@ system_packages:
   - mitmproxy  # Interactive TLS-capable intercepting HTTP proxy
   - mtr-tiny  # Network diagnostic tool combining traceroute and ping
   - name-that-hash  # CLI tool to identify hash types
-  - ncat  # Feature-packed networking utility which reads and writes data across networks
+  # Feature-packed networking utility which reads and writes data across
+  # networks
+  - ncat
   - neovim  # Hyperextensible Vim-based text editor
   - ngrep  # Grep applied to network traffic
   - nishang  # PowerShell for penetration testing and offensive security
   - npm  # Node.js package manager
   - oscanner  # Oracle assessment framework
-  - pandoc # Universal document converter
+  - pandoc  # Universal document converter
   - peass  # Privilege escalation awesome scripts suite
   - p0f  # Passive OS fingerprinting tool
-  - parallel  # Build and execute shell command lines from standard input in parallel
+  # Build and execute shell command lines from standard input in parallel
+  - parallel
   - paramspider  # Mining parameter from the dark coners of the web archives
-  - payloadsallthethings  # Collection of useful payloads and bypasses for Web Application Security
+  # Collection of useful payloads and bypasses for Web Application Security
+  - payloadsallthethings
   - pcre2-utils  # Provides pcre2grep and pcre2test (perl-compatible regex)
   - pipx  # Install and run Python applications in isolated environments
   - python3-cachecontrol  # HTTP cache for Python requests
@@ -75,12 +96,17 @@ system_packages:
   - python3-pip  # Python package installer
   - python3-poetry  # Python dependency management and packaging tool
   - python3-pwntools  # CTF framework and exploit development library
-  - qsreplace  # Accept URLs on stdin, replace all query string values with a user-supplied value
+  # Accept URLs on stdin, replace all query string values with a user-supplied
+  # value
+  - qsreplace
   - realtek-rtl88xxau-dkms  # Realtek RTL88xxAU driver in DKMS format
   - ripgrep  # Recursively searches directories for a regex pattern
-  - ropper # Tool to find gadgets in binaries
+  - ropper  # Tool to find gadgets in binaries
   - rlwrap  # Readline wrapper for command line interfaces
-  - seclists  # Collection of multiple types of lists used during security assessments
+  - ruff  # Python linter and formatter
+  - rustscan  # Fast port scanner built in Rust
+  # Collection of multiple types of lists used during security assessments
+  - seclists
   - sherlock  # Tool to find usernames across social networks
   - sshuttle  # Transparent proxy server for VPN-like functionality
   - sslstrip  # Tool for stripping SSL/TLS from HTTP traffic
@@ -93,60 +119,74 @@ system_packages:
   - tig  # Text-mode interface for git
   - tnscmd10g  # Oracle TNS command-line tool
   - tree  # Recursive directory listing command
-  # - tree-sitter-cli  # CLI for Tree-sitter, a parser generator tool and incremental parsing library (required by neovim/lazyvim)
-  - trivy  # Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Kubernetes, code repositories, clouds and more
-  - trufflehog  # Searches through git repositories for high entropy strings and secrets
-  - xh  # Friendly and fast tool for sending HTTP requests, a curl/httpie alternative
+  # - tree-sitter-cli  # CLI for Tree-sitter, a parser generator tool and
+  # incremental parsing library (required by neovim/lazyvim)
+  # Find vulnerabilities, misconfigurations, secrets, SBOM in containers,
+  # Kubernetes, code repositories, clouds and more
+  - trivy
+  # Searches through git repositories for high entropy strings and secrets
+  - trufflehog
+  # Friendly and fast tool for sending HTTP requests, a curl/httpie alternative
+  - xh
   - xsser  # Automated XSS vulnerability scanner
   - xterm  # Standard terminal emulator for the X Window System
   - zaproxy  # OWASP Zed Attack Proxy - web application security scanner
   - zoxide  # Smarter 'cd' command
 
 pipx_packages:
-  - ruff  # Python linter and formatter
   - chepy  # Python lib/cli equivalent of the awesome CyberChef tool
   - checkov  # Static code analysis tool for security vulnerabilities
   - prowler  # AWS security best practices assessment tool
   - scoutsuite  # Multi-cloud security-auditing tool
   - volatility3  # Advanced memory forensics framework
   - maigret  # OSINT tool to search for usernames across hundreds of platforms
+  - uv  # Python package and project manager
 
 cargo_packages:
-  - uv  # python packge and project manager
   - tlrc  # Official tldr rust client
-  - rustscan  # Fast port scanner built in Rust
 
 golang_tools:
-  - github.com/wagoodman/dive@latest  # Tool for exploring each layer in a docker image
+  # Tool for exploring each layer in a docker image
+  - github.com/wagoodman/dive@latest
   - github.com/tomnomnom/anew@latest  # Tool to add new lines to a file
-  - github.com/lc/gau/v2/cmd/gau@latest  # Fetch known URLs from AlienVault's OTX, the Wayback Machine, and Common Crawl
-  - github.com/tomnomnom/waybackurls@latest  # Tool to fetch all the URLs that the Wayback Machine has archived for a given domain
+  # Fetch known URLs from AlienVault's OTX, the Wayback Machine, and Common
+  # Crawl
+  - github.com/lc/gau/v2/cmd/gau@latest
+  # Tool to fetch all the URLs that the Wayback Machine has archived for a given
+  # domain
+  - github.com/tomnomnom/waybackurls@latest
   - github.com/jaeles-project/jaeles@latest  # Modular web scanner written in Go
 
 # nerd fonts from https://github.com/ryanoasis/nerd-fonts
-nerd_fonts_version: v3.5.1  # TODO: bump up version number as newer versions are made available from source git repo
-nerd_fonts_base_url: "https://github.com/ryanoasis/nerd-fonts/raw/{{ nerd_fonts_version }}/patched-fonts"
+# TODO: bump up version number as newer versions are made available from source
+# git repo
+nerd_fonts_version: v3.5.1
+nerd_fonts_base_url: >-
+  {{ 'https://github.com/ryanoasis/nerd-fonts/raw/'
+     ~ nerd_fonts_version ~ '/patched-fonts' }}
 nerd_fonts:
-  # CascadiaCode
-  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFont-BoldItalic.ttf"  # don't remove; alacritty config uses this
-  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFont-Bold.ttf"        # don't remove; alacritty config uses this
-  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFont-Italic.ttf"      # don't remove; alacritty config uses this
-  - "{{ nerd_fonts_base_url }}/CascadiaCode/CaskaydiaCoveNerdFont-Regular.ttf"     # don't remove; alacritty config uses this
+  # CascadiaCode (alacritty config uses these four)
+  - CascadiaCode/CaskaydiaCoveNerdFont-BoldItalic.ttf
+  - CascadiaCode/CaskaydiaCoveNerdFont-Bold.ttf
+  - CascadiaCode/CaskaydiaCoveNerdFont-Italic.ttf
+  - CascadiaCode/CaskaydiaCoveNerdFont-Regular.ttf
 
   # JetBrainsMono (Ligatures)
-  - "{{ nerd_fonts_base_url }}/JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-BoldItalic.ttf"
-  - "{{ nerd_fonts_base_url }}/JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-Bold.ttf"
-  - "{{ nerd_fonts_base_url }}/JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-Italic.ttf"
-  - "{{ nerd_fonts_base_url }}/JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-Regular.ttf"
+  - JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-BoldItalic.ttf
+  - JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-Bold.ttf
+  - JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-Italic.ttf
+  - JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-Regular.ttf
 
   # SourceCodePro
-  - "{{ nerd_fonts_base_url }}/SourceCodePro/SauceCodeProNerdFontMono-BoldItalic.ttf"
-  - "{{ nerd_fonts_base_url }}/SourceCodePro/SauceCodeProNerdFontMono-Bold.ttf"
-  - "{{ nerd_fonts_base_url }}/SourceCodePro/SauceCodeProNerdFontMono-Italic.ttf"
-  - "{{ nerd_fonts_base_url }}/SourceCodePro/SauceCodeProNerdFontMono-Regular.ttf"
+  - SourceCodePro/SauceCodeProNerdFontMono-BoldItalic.ttf
+  - SourceCodePro/SauceCodeProNerdFontMono-Bold.ttf
+  - SourceCodePro/SauceCodeProNerdFontMono-Italic.ttf
+  - SourceCodePro/SauceCodeProNerdFontMono-Regular.ttf
 
 projectdiscovery_tools:
-  - pdtm  # ProjectDiscovery Tool Manager - manages installation and updates of ProjectDiscovery tools
+  # ProjectDiscovery Tool Manager - manages installation and updates of
+  # ProjectDiscovery tools
+  - pdtm
   - nuclei  # Fast and customizable vulnerability scanner based on templates
   - naabu  # Fast port scanner for network reconnaissance
   - subfinder  # Subdomain discovery tool
@@ -154,12 +194,15 @@ projectdiscovery_tools:
   - katana  # Web crawling and spidering framework
   - dnsx  # Fast and flexible DNS toolkit
   - tlsx  # Fast and configurable TLS/SSL data collection tool
-  - simplehttpserver  # Lightweight HTTP server for quick file sharing and testing
+  # Lightweight HTTP server for quick file sharing and testing
+  - simplehttpserver
 
-projectdiscovery_tool_manager_url: "https://api.github.com/repos/projectdiscovery/pdtm/releases/latest"
+projectdiscovery_tool_manager_url: "https://api.github.com/repos/\
+  projectdiscovery/pdtm/releases/latest"
 
 vscodium:
-  apt_key_url: "https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg"
+  apt_key_url: "https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/\
+    raw/master/pub.gpg"
   uris: "https://download.vscodium.com/debs"
   suites: "vscodium"
   components: "main"
