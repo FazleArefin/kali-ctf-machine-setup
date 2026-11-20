@@ -450,7 +450,7 @@
       ansible.builtin.apt:
         name: "{{ vscodium.package }}"
         update_cache: true
-        cache_valid_time: 3600
+        cache_valid_time: 0
 
     - name: Install some VSCodium extensions
       ansible.builtin.command: "codium --install-extension {{ item }}"
