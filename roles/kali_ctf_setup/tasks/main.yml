@@ -188,70 +188,14 @@
         dest: /usr/share/privesc-scripts
         state: link
 
-    - name: Git clone LinEnum
+    - name: Git clone tools
       ansible.builtin.git:
-        repo: 'https://github.com/rebootuser/LinEnum.git'
-        dest: /opt/privesc-scripts/LinEnum
-        clone: true
-        version: master
-        update: true
+        repo: "{{ item.repo }}"
+        dest: "{{ item.dest }}"
+        version: "{{ item.version | default('HEAD') }}"
+        depth: "{{ item.depth | default(omit) }}"
         force: true
-
-    - name: Git clone linux-smart-enumeration
-      ansible.builtin.git:
-        repo: 'https://github.com/diego-treitos/linux-smart-enumeration'
-        dest: /opt/privesc-scripts/linux-smart-enumeration
-        clone: true
-        version: master
-        update: true
-        force: true
-
-    - name: Git clone linux-exploit-suggester
-      ansible.builtin.git:
-        repo: 'https://github.com/The-Z-Labs/linux-exploit-suggester.git'
-        dest: /opt/privesc-scripts/linux-exploit-suggester
-        clone: true
-        version: master
-        update: true
-        force: true
-
-    - name: Git clone GitTools
-      ansible.builtin.git:
-        repo: 'https://github.com/internetwache/GitTools.git'
-        dest: /opt/GitTools
-        clone: true
-        version: master
-        update: true
-        force: true
-
-    - name: Git clone zphisher  # An automated phishing tool with 30+ templates
-      ansible.builtin.git:
-        repo: 'https://github.com/htr-tech/zphisher.git'
-        dest: /opt/zphisher
-        clone: true
-        version: master
-        depth: 1
-        update: true
-        force: true
-
-    # Pre-Built Vulnerable Environments Based on Docker-Compose
-    - name: Git clone vulhub
-      ansible.builtin.git:
-        repo: 'https://github.com/vulhub/vulhub.git'
-        dest: /opt/vulhub
-        clone: true
-        version: master
-        update: true
-        force: true
-
-    - name: Git clone WEF (Wi-Fi Exploitation Framework)
-      ansible.builtin.git:
-        repo: 'https://github.com/D3Ext/WEF.git'
-        dest: /opt/WEF
-        clone: true
-        version: main
-        update: true
-        force: true
+      loop: "{{ git_repos }}"
 
 - name: Setup some CTF style vulnerable docker images and packages
   when: setup_vuln_docker_images | bool

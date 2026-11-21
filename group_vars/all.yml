@@ -225,4 +225,20 @@ alacritty_themes_repo: "https://github.com/alacritty/alacritty-theme"
 
 lazyvim_starter_url: https://github.com/LazyVim/starter.git
 
+git_repos:
+  - repo: https://github.com/rebootuser/LinEnum.git
+    dest: /opt/privesc-scripts/LinEnum
+  - repo: https://github.com/diego-treitos/linux-smart-enumeration
+    dest: /opt/privesc-scripts/linux-smart-enumeration
+  - repo: https://github.com/The-Z-Labs/linux-exploit-suggester.git
+    dest: /opt/privesc-scripts/linux-exploit-suggester
+  - repo: https://github.com/internetwache/GitTools.git
+    dest: /opt/GitTools
+  - repo: https://github.com/htr-tech/zphisher.git  # Automated phishing tool with 30+ templates
+    dest: /opt/zphisher
+  - repo: https://github.com/vulhub/vulhub.git  # Pre-built vulnerable environments based on docker-compose
+    dest: /opt/vulhub
+  - repo: https://github.com/D3Ext/WEF.git  # Wi-Fi Exploitation Framework
+    dest: /opt/WEF
+
 ...
