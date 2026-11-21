@@ -1,0 +1,24 @@
+---
+
+# Docker itself is installed by the base role; the lab only pulls targets.
+ctf_lab_docker_images:
+  # docker run --rm -it -p 127.0.0.1:8080:8080 -p 127.0.0.1:9090:9090
+  #   -e TZ=UTC --name webgoat webgoat/webgoat
+  - webgoat/webgoat
+  # docker run --rm -d -p 3000:3000 --name juice-shop
+  # bkimminich/juice-shop
+  - bkimminich/juice-shop
+
+ctf_lab_packages:
+  - dvwa
+  # start the service using `sudo systemctl start dvwa`
+  # navigate to http://localhost:42001
+  # default creds are admin/password
+  # Security Level can be changed in /etc/dvwa/config/config.inc.php
+
+# Pre-built vulnerable environments based on docker-compose.
+ctf_lab_git_repos:
+  - repo: https://github.com/vulhub/vulhub.git
+    dest: /opt/vulhub
+
+...

@@ -1,8 +1,10 @@
 ---
 
-# Override via: -e "local_username=$(id -un)"
-local_username: "{{ lookup('env', 'USER') }}"
-setup_vuln_docker_images: false
+docker_service: docker
+
+docker_packages:
+  - docker.io
+  - python3-docker
 
 system_packages:
   - alacritty  # GPU-accelerated terminal emulator
@@ -225,6 +227,8 @@ alacritty_themes_repo: "https://github.com/alacritty/alacritty-theme"
 
 lazyvim_starter_url: https://github.com/LazyVim/starter.git
 
+# Attack/defense tooling installed on the base host. Vulnerable environments
+# (e.g. vulhub) belong to the lab role instead.
 git_repos:
   - repo: https://github.com/rebootuser/LinEnum.git
     dest: /opt/privesc-scripts/LinEnum
@@ -234,10 +238,9 @@ git_repos:
     dest: /opt/privesc-scripts/linux-exploit-suggester
   - repo: https://github.com/internetwache/GitTools.git
     dest: /opt/GitTools
-  - repo: https://github.com/htr-tech/zphisher.git  # Automated phishing tool with 30+ templates
+  # Automated phishing tool with 30+ templates
+  - repo: https://github.com/htr-tech/zphisher.git
     dest: /opt/zphisher
-  - repo: https://github.com/vulhub/vulhub.git  # Pre-built vulnerable environments based on docker-compose
-    dest: /opt/vulhub
   - repo: https://github.com/D3Ext/WEF.git  # Wi-Fi Exploitation Framework
     dest: /opt/WEF
 

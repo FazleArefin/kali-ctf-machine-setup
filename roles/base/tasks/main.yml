@@ -14,28 +14,20 @@
     cache_valid_time: 3600
     upgrade: full
 
+- name: "Enable passwordless sudo for user {{ local_username }}"
+  ansible.builtin.user:
+    name: "{{ local_username }}"
+    groups: kali-trusted
+    append: true
+
+- name: Set system time to UTC
+  community.general.timezone:
+    name: Etc/UTC
+
 - name: Install some recommended additional packages
   ansible.builtin.apt:
     pkg: "{{ system_packages }}"
     state: present
-
-# pipx binaries break when Python is upgraded, so rebuild every package
-# against the current interpreter. pipx uninstall-all removes only pipx's
-# own venvs and shims, leaving anything else in ~/.local/bin untouched.
-- name: Install pipx packages
-  become: true
-  become_user: "{{ local_username }}"
-  block:
-    - name: Remove pipx-managed packages for a clean rebuild
-      ansible.builtin.command: pipx uninstall-all
-      register: kali_ctf_setup_pipx_uninstall_all
-      changed_when: kali_ctf_setup_pipx_uninstall_all.stdout | trim | length > 0
-
-    - name: Install the pipx packages
-      community.general.pipx:
-        name: "{{ item }}"
-        python: /usr/bin/python3
-      loop: "{{ pipx_packages }}"
 
 - name: Process wordlists
   block:
@@ -108,6 +100,223 @@
         remote_src: true
       notify: Update CA certificates
 
+- name: Install Docker packages
+  ansible.builtin.apt:
+    pkg: "{{ docker_packages }}"
+    state: present
+
+- name: Ensure Docker is running and enabled on startup
+  ansible.builtin.systemd:
+    name: "{{ docker_service }}"
+    state: started
+    enabled: true
+
+- name: Make local user able to run docker commands
+  ansible.builtin.user:
+    name: "{{ local_username }}"
+    append: true
+    groups:
+      - docker
+
+# pipx binaries break when Python is upgraded, so rebuild every package
+# against the current interpreter. pipx uninstall-all removes only pipx's
+# own venvs and shims, leaving anything else in ~/.local/bin untouched.
+- name: Install pipx packages
+  become: true
+  become_user: "{{ local_username }}"
+  block:
+    - name: Remove pipx-managed packages for a clean rebuild
+      ansible.builtin.command: pipx uninstall-all
+      register: base_pipx_uninstall_all
+      changed_when: base_pipx_uninstall_all.stdout | trim | length > 0
+
+    - name: Install the pipx packages
+      community.general.pipx:
+        name: "{{ item }}"
+        python: /usr/bin/python3
+      loop: "{{ pipx_packages }}"
+
+- name: Install projectdiscovery.io OSS tools
+  become: true
+  become_user: "{{ local_username }}"
+  block:
+    - name: Create projectdiscovery temporary directory for extraction
+      ansible.builtin.file:
+        path: /tmp/projectdiscovery
+        state: directory
+        mode: '0755'
+
+    - name: Get host architecture
+      ansible.builtin.command: dpkg --print-architecture
+      register: base_host_architecture
+      changed_when: false
+
+    - name: Set architecture fact
+      ansible.builtin.set_fact:
+        base_cpu_arch: "{{ base_host_architecture.stdout }}"
+
+    - name: Get latest release information for pdtm
+      ansible.builtin.uri:
+        url: "{{ projectdiscovery_tool_manager_url }}"
+        return_content: true
+      register: base_pdtm_latest_release
+
+    - name: Extract pdtm version from the latest release URL
+      ansible.builtin.set_fact:
+        base_pdtm_version: >-
+          {{ base_pdtm_latest_release.json.tag_name
+             | regex_replace('^v', '') }}
+
+    - name: Extract download URL for pdtm
+      ansible.builtin.set_fact:
+        base_pdtm_download_url: >-
+          {{ base_pdtm_latest_release.json.assets
+             | selectattr('name', 'match',
+                          '^pdtm_' ~ base_pdtm_version
+                          ~ '_linux_' ~ base_cpu_arch ~ '.zip$')
+             | map(attribute='browser_download_url')
+             | first }}
+
+    - name: Download pdtm file
+      ansible.builtin.get_url:
+        url: "{{ base_pdtm_download_url }}"
+        mode: '0644'
+        dest: >-
+          {{ '/tmp/projectdiscovery/pdtm_' ~ base_pdtm_version
+             ~ '_linux_' ~ base_cpu_arch ~ '.zip' }}
+
+    - name: Unzip pdtm file
+      ansible.builtin.unarchive:
+        src: >-
+          {{ '/tmp/projectdiscovery/pdtm_' ~ base_pdtm_version
+             ~ '_linux_' ~ base_cpu_arch ~ '.zip' }}
+        dest: /tmp/projectdiscovery
+        remote_src: true
+
+    # Also appends ~/.pdtm/go/bin to PATH in ~/.zshrc
+    - name: Execute pdtm file
+      ansible.builtin.command:
+        cmd: "/tmp/projectdiscovery/pdtm -i pdtm"
+        creates: "/home/{{ local_username }}/.pdtm/go/bin/pdtm"
+
+    - name: Remove projectdiscovery.io temporary download directory
+      ansible.builtin.file:
+        path: /tmp/projectdiscovery
+        state: absent
+
+    - name: Install all other projectdiscovery.io tools
+      ansible.builtin.command:
+        cmd: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -i {{ item }}"
+        creates: "/home/{{ local_username }}/.pdtm/go/bin/{{ item }}"
+      with_items: "{{ projectdiscovery_tools }}"
+
+    - name: Update all projectdiscovery.io tools
+      ansible.builtin.command: >-
+        /home/{{ local_username }}/.pdtm/go/bin/pdtm -update-all
+      changed_when: true
+
+- name: Install VSCodium and some plugins
+  block:
+    - name: Add VSCodium repo (deb822 format)
+      ansible.builtin.deb822_repository:
+        name: "{{ vscodium.repo_filename }}"
+        types: deb
+        architectures: "{{ vscodium.architectures }}"
+        uris: "{{ vscodium.uris }}"
+        suites: "{{ vscodium.suites }}"
+        components: "{{ vscodium.components }}"
+        signed_by: "{{ vscodium.apt_key_url }}"
+        state: present
+
+    - name: Install the latest version of VSCodium
+      ansible.builtin.apt:
+        name: "{{ vscodium.package }}"
+        update_cache: true
+        cache_valid_time: 0
+
+    - name: Install some VSCodium extensions
+      ansible.builtin.command: >-
+        codium --install-extension {{ item }}
+      loop: "{{ vscodium.extensions }}"
+      loop_control:
+        pause: 1  # slow down installs to avoid rate limiting
+      become: true
+      become_user: "{{ local_username }}"
+      register: base_codium_extension
+      async: 120
+      poll: 2
+      retries: 5
+      delay: 5
+      until: base_codium_extension is not failed
+      changed_when: >-
+        'successfully installed' in
+        (((base_codium_extension.stdout | default('')) ~ ' ' ~
+          (base_codium_extension.stderr | default(''))) | lower)
+      failed_when: >-
+        base_codium_extension.rc | default(1) != 0
+        and 'already installed' not in
+        (((base_codium_extension.stdout | default('')) ~ ' ' ~
+          (base_codium_extension.stderr | default(''))) | lower)
+
+- name: Build and install Rust binaries using cargo
+  community.general.cargo:
+    name: "{{ item }}"
+    locked: true
+    state: latest
+  with_items: "{{ cargo_packages }}"
+  become: true
+  become_user: "{{ local_username }}"
+
+- name: Build and install Go binaries
+  ansible.builtin.command: "go install {{ item }}"
+  changed_when: true
+  with_items: "{{ golang_tools }}"
+  become: true
+  become_user: "{{ local_username }}"
+
+- name: Get an offline copy of all tldr pages
+  ansible.builtin.command:
+    argv:
+      - /bin/zsh
+      - -i
+      - -c
+      - tldr --update
+  changed_when: true
+  become: true
+  become_user: "{{ local_username }}"
+
+# Fix for bat syntax highlighting tool; Debian packages it as batcat instead
+# of just bat
+- name: Create symlink for bat
+  ansible.builtin.file:
+    src: /usr/bin/batcat
+    dest: /usr/local/bin/bat
+    state: link
+    force: true
+
+- name: Clone some git repositories
+  block:
+    - name: Create base dir for privesc scripts
+      ansible.builtin.file:
+        path: /opt/privesc-scripts
+        state: directory
+        mode: '0775'
+
+    - name: Create symlink from /usr/share
+      ansible.builtin.file:
+        src: /opt/privesc-scripts
+        dest: /usr/share/privesc-scripts
+        state: link
+
+    - name: Git clone tools
+      ansible.builtin.git:
+        repo: "{{ item.repo }}"
+        dest: "{{ item.dest }}"
+        version: "{{ item.version | default('HEAD') }}"
+        depth: "{{ item.depth | default(omit) }}"
+        force: true
+      loop: "{{ git_repos }}"
+
 - name: Setup tmux
   block:
     - name: Install packages needed for tmux
@@ -156,164 +365,18 @@
     - name: Download nerd fonts to local fonts folder
       ansible.builtin.get_url:
         url: "{{ nerd_fonts_base_url }}/{{ item }}"
-        dest: "/home/{{ local_username }}/.local/share/fonts/{{ item | basename }}"
+        dest: >-
+          /home/{{ local_username }}/.local/share/fonts/{{ item | basename }}
         mode: '0644'
         timeout: 20  # GitHub raw can be slow; avoid 10s default timeout
-      register: kali_ctf_setup_nerd_font_downloads
+      register: base_nerd_font_downloads
       retries: 5
       delay: 5
-      until: kali_ctf_setup_nerd_font_downloads is not failed
+      until: base_nerd_font_downloads is not failed
       loop: "{{ nerd_fonts }}"
       loop_control:
         pause: 1  # slow down downloads to avoid server overload
       notify: Refresh fonts cache
-
-- name: "Enable passwordless sudo for user {{ local_username }}"
-  ansible.builtin.user:
-    name: "{{ local_username }}"
-    groups: kali-trusted
-    append: true
-
-- name: Clone some git repositories
-  block:
-    - name: Create base dir for privesc scripts
-      ansible.builtin.file:
-        path: /opt/privesc-scripts
-        state: directory
-        mode: '0775'
-
-    - name: Create symlink from /usr/share
-      ansible.builtin.file:
-        src: /opt/privesc-scripts
-        dest: /usr/share/privesc-scripts
-        state: link
-
-    - name: Git clone tools
-      ansible.builtin.git:
-        repo: "{{ item.repo }}"
-        dest: "{{ item.dest }}"
-        version: "{{ item.version | default('HEAD') }}"
-        depth: "{{ item.depth | default(omit) }}"
-        force: true
-      loop: "{{ git_repos }}"
-
-- name: Setup some CTF style vulnerable docker images and packages
-  when: setup_vuln_docker_images | bool
-  block:
-    - name: Install docker packages
-      ansible.builtin.apt:
-        pkg:
-          - docker.io
-          - python3-docker
-
-    - name: Make local user able to run docker commands
-      ansible.builtin.user:
-        name: "{{ local_username }}"
-        append: true
-        groups:
-          - docker
-
-    - name: Pull some vulnerable docker images
-      community.docker.docker_image:
-        name: "{{ item }}"
-        source: pull
-        force_source: true
-      loop:
-        # docker run --rm -it -p 127.0.0.1:8080:8080 -p 127.0.0.1:9090:9090
-        #   -e TZ=UTC --name webgoat webgoat/webgoat
-        - webgoat/webgoat
-        # docker run --rm -d -p 3000:3000 --name juice-shop
-        # bkimminich/juice-shop
-        - bkimminich/juice-shop
-
-    - name: Install DVWA package
-      ansible.builtin.apt:
-        pkg:
-          - dvwa
-          # start the service using `sudo systemctl start dvwa`
-          # navigate to http://localhost:42001
-          # default creds are admin/password
-          # Security Level can be changed in /etc/dvwa/config/config.inc.php
-
-
-- name: Install projectdiscovery.io OSS tools
-  become: true
-  become_user: "{{ local_username }}"
-  block:
-    - name: Create projectdiscovery temporary directory for extraction
-      ansible.builtin.file:
-        path: /tmp/projectdiscovery
-        state: directory
-        mode: '0755'
-
-    - name: Get host architecture
-      ansible.builtin.command: dpkg --print-architecture
-      register: kali_ctf_setup_host_architecture
-      changed_when: false
-
-    - name: Set architecture fact
-      ansible.builtin.set_fact:
-        kali_ctf_setup_cpu_arch: "{{ kali_ctf_setup_host_architecture.stdout }}"
-
-    - name: Get latest release information for pdtm
-      ansible.builtin.uri:
-        url: "{{ projectdiscovery_tool_manager_url }}"
-        return_content: true
-      register: kali_ctf_setup_pdtm_latest_release
-
-    - name: Extract pdtm version from the latest release URL
-      ansible.builtin.set_fact:
-        kali_ctf_setup_pdtm_version: >-
-          {{ kali_ctf_setup_pdtm_latest_release.json.tag_name
-             | regex_replace('^v', '') }}
-
-    - name: Extract download URL for pdtm
-      ansible.builtin.set_fact:
-        kali_ctf_setup_pdtm_download_url: >-
-          {{ kali_ctf_setup_pdtm_latest_release.json.assets
-             | selectattr('name', 'match',
-                          '^pdtm_' ~ kali_ctf_setup_pdtm_version
-                          ~ '_linux_' ~ kali_ctf_setup_cpu_arch ~ '.zip$')
-             | map(attribute='browser_download_url')
-             | first }}
-
-    - name: Download pdtm file
-      ansible.builtin.get_url:
-        url: "{{ kali_ctf_setup_pdtm_download_url }}"
-        mode: '0644'
-        dest: >-
-          {{ '/tmp/projectdiscovery/pdtm_' ~ kali_ctf_setup_pdtm_version
-             ~ '_linux_' ~ kali_ctf_setup_cpu_arch ~ '.zip' }}
-
-    - name: Unzip pdtm file
-      ansible.builtin.unarchive:
-        src: >-
-          {{ '/tmp/projectdiscovery/pdtm_' ~ kali_ctf_setup_pdtm_version
-             ~ '_linux_' ~ kali_ctf_setup_cpu_arch ~ '.zip' }}
-        dest: /tmp/projectdiscovery
-        remote_src: true
-
-    # Also appends ~/.pdtm/go/bin to PATH in ~/.zshrc
-    - name: Execute pdtm file
-      ansible.builtin.command:
-        cmd: "/tmp/projectdiscovery/pdtm -i pdtm"
-        creates: "/home/{{ local_username }}/.pdtm/go/bin/pdtm"
-
-    - name: Remove projectdiscovery.io temporary download directory
-      ansible.builtin.file:
-        path: /tmp/projectdiscovery
-        state: absent
-
-    - name: Install all other projectdiscovery.io tools
-      ansible.builtin.command:
-        cmd: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -i {{ item }}"
-        creates: "/home/{{ local_username }}/.pdtm/go/bin/{{ item }}"
-      with_items: "{{ projectdiscovery_tools }}"
-
-    - name: Update all projectdiscovery.io tools
-      ansible.builtin.command: >-
-        /home/{{ local_username }}/.pdtm/go/bin/pdtm -update-all
-      changed_when: true
 
 - name: Setup some essential paths
   become: true
@@ -384,80 +447,6 @@
         create: true
         mode: '0644'
 
-- name: Install VSCodium and some plugins
-  block:
-    - name: Add VSCodium repo (deb822 format)
-      ansible.builtin.deb822_repository:
-        name: "{{ vscodium.repo_filename }}"
-        types: deb
-        architectures: "{{ vscodium.architectures }}"
-        uris: "{{ vscodium.uris }}"
-        suites: "{{ vscodium.suites }}"
-        components: "{{ vscodium.components }}"
-        signed_by: "{{ vscodium.apt_key_url }}"
-        state: present
-
-    - name: Install the latest version of VSCodium
-      ansible.builtin.apt:
-        name: "{{ vscodium.package }}"
-        update_cache: true
-        cache_valid_time: 0
-
-    - name: Install some VSCodium extensions
-      ansible.builtin.command: >-
-        codium --install-extension {{ item }}
-      loop: "{{ vscodium.extensions }}"
-      loop_control:
-        pause: 1  # slow down installs to avoid rate limiting
-      become: true
-      become_user: "{{ local_username }}"
-      register: kali_ctf_setup_codium_extension
-      async: 120
-      poll: 2
-      retries: 5
-      delay: 5
-      until: kali_ctf_setup_codium_extension is not failed
-      changed_when: >-
-        'successfully installed' in
-        (((kali_ctf_setup_codium_extension.stdout | default('')) ~ ' ' ~
-          (kali_ctf_setup_codium_extension.stderr | default(''))) | lower)
-      failed_when: >-
-        kali_ctf_setup_codium_extension.rc | default(1) != 0
-        and 'already installed' not in
-        (((kali_ctf_setup_codium_extension.stdout | default('')) ~ ' ' ~
-          (kali_ctf_setup_codium_extension.stderr | default(''))) | lower)
-
-- name: Build and install Rust binaries using cargo
-  community.general.cargo:
-    name: "{{ item }}"
-    locked: true
-    state: latest
-  with_items: "{{ cargo_packages }}"
-  become: true
-  become_user: "{{ local_username }}"
-
-- name: Build and install Go binaries
-  ansible.builtin.command: "go install {{ item }}"
-  changed_when: true
-  with_items: "{{ golang_tools }}"
-  become: true
-  become_user: "{{ local_username }}"
-
-- name: Set system time to UTC
-  community.general.timezone:
-    name: Etc/UTC
-
-- name: Get an offline copy of all tldr pages
-  ansible.builtin.command:
-    argv:
-      - /bin/zsh
-      - -i
-      - -c
-      - tldr --update
-  changed_when: true
-  become: true
-  become_user: "{{ local_username }}"
-
 - name: Setup alacritty
   become: true
   become_user: "{{ local_username }}"
@@ -507,15 +496,6 @@
       source <(fzf --zsh)
     create: true
     mode: '0644'
-
-# Fix for bat syntax highlighting tool; Debian packages it as batcat instead
-# of just bat
-- name: Create symlink for bat
-  ansible.builtin.file:
-    src: /usr/bin/batcat
-    dest: /usr/local/bin/bat
-    state: link
-    force: true
 
 - name: Final cleanup
   block:

@@ -1,0 +1,12 @@
+---
+
+# Shared settings used by both roles.
+# Override via: -e "local_username=$(id -un)"
+local_username: "{{ lookup('env', 'USER') }}"
+
+# Set to true to also install the self-learning lab: Docker, deliberately
+# vulnerable images/packages and vulnerable git repos.
+# Override via: -e "lab=true"
+lab: false
+
+...
