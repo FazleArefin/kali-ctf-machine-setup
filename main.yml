@@ -1,6 +1,9 @@
 ---
 
-- name: Install essential tools
+- name: Setup a CTF/pentest machine
   hosts: localhost
   roles:
-    - kali_ctf_setup
+    - role: base
+
+    - role: lab
+      when: lab | bool
