@@ -453,15 +453,28 @@
         cache_valid_time: 0
 
     - name: Install some VSCodium extensions
-      ansible.builtin.command: "codium --install-extension {{ item }}"
-      register: kali_ctf_setup_codium_extension
-      changed_when: >-
-        'successfully installed' in
-        (kali_ctf_setup_codium_extension.stdout +
-         kali_ctf_setup_codium_extension.stderr)
-      with_items: "{{ vscodium.extensions }}"
+      ansible.builtin.command: >-
+        codium --install-extension {{ item }}
+      loop: "{{ vscodium.extensions }}"
+      loop_control:
+        pause: 1  # slow down installs to avoid rate limiting
       become: true
       become_user: "{{ local_username }}"
+      register: kali_ctf_setup_codium_extension
+      async: 120
+      poll: 2
+      retries: 5
+      delay: 5
+      until: kali_ctf_setup_codium_extension is not failed
+      changed_when: >-
+        'successfully installed' in
+        (((kali_ctf_setup_codium_extension.stdout | default('')) ~ ' ' ~
+          (kali_ctf_setup_codium_extension.stderr | default(''))) | lower)
+      failed_when: >-
+        kali_ctf_setup_codium_extension.rc | default(1) != 0
+        and 'already installed' not in
+        (((kali_ctf_setup_codium_extension.stdout | default('')) ~ ' ' ~
+          (kali_ctf_setup_codium_extension.stderr | default(''))) | lower)
 
 - name: Build and install Rust binaries using cargo
   community.general.cargo:
