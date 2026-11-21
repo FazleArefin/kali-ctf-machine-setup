@@ -156,9 +156,16 @@
     - name: Download nerd fonts to local fonts folder
       ansible.builtin.get_url:
         url: "{{ nerd_fonts_base_url }}/{{ item }}"
-        dest: "/home/{{ local_username }}/.local/share/fonts/"
+        dest: "/home/{{ local_username }}/.local/share/fonts/{{ item | basename }}"
         mode: '0644'
-      with_items: "{{ nerd_fonts }}"
+        timeout: 20  # GitHub raw can be slow; avoid 10s default timeout
+      register: kali_ctf_setup_nerd_font_downloads
+      retries: 5
+      delay: 5
+      until: kali_ctf_setup_nerd_font_downloads is not failed
+      loop: "{{ nerd_fonts }}"
+      loop_control:
+        pause: 1  # slow down downloads to avoid server overload
       notify: Refresh fonts cache
 
 - name: "Enable passwordless sudo for user {{ local_username }}"
