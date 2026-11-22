@@ -26,7 +26,7 @@
 
 - name: Install some recommended additional packages
   ansible.builtin.apt:
-    pkg: "{{ system_packages }}"
+    pkg: "{{ base_system_packages }}"
     state: present
 
 - name: Process wordlists
@@ -102,12 +102,12 @@
 
 - name: Install Docker packages
   ansible.builtin.apt:
-    pkg: "{{ docker_packages }}"
+    pkg: "{{ base_docker_packages }}"
     state: present
 
 - name: Ensure Docker is running and enabled on startup
   ansible.builtin.systemd:
-    name: "{{ docker_service }}"
+    name: "{{ base_docker_service_name }}"
     state: started
     enabled: true
 
@@ -134,7 +134,7 @@
       community.general.pipx:
         name: "{{ item }}"
         python: /usr/bin/python3
-      loop: "{{ pipx_packages }}"
+      loop: "{{ base_pipx_packages }}"
 
 - name: Install projectdiscovery.io OSS tools
   become: true
@@ -157,7 +157,7 @@
 
     - name: Get latest release information for pdtm
       ansible.builtin.uri:
-        url: "{{ projectdiscovery_tool_manager_url }}"
+        url: "{{ base_pdtm_latest_release_url }}"
         return_content: true
       register: base_pdtm_latest_release
 
@@ -208,7 +208,7 @@
       ansible.builtin.command:
         cmd: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -i {{ item }}"
         creates: "/home/{{ local_username }}/.pdtm/go/bin/{{ item }}"
-      with_items: "{{ projectdiscovery_tools }}"
+      with_items: "{{ base_projectdiscovery_tools }}"
 
     - name: Update all projectdiscovery.io tools
       ansible.builtin.command: >-
@@ -222,25 +222,25 @@
   block:
     - name: Add VSCodium repo (deb822 format)
       ansible.builtin.deb822_repository:
-        name: "{{ vscodium.repo_filename }}"
+        name: "{{ base_vscodium.repo_filename }}"
         types: deb
-        architectures: "{{ vscodium.architectures }}"
-        uris: "{{ vscodium.uris }}"
-        suites: "{{ vscodium.suites }}"
-        components: "{{ vscodium.components }}"
-        signed_by: "{{ vscodium.apt_key_url }}"
+        architectures: "{{ base_vscodium.architectures }}"
+        uris: "{{ base_vscodium.uris }}"
+        suites: "{{ base_vscodium.suites }}"
+        components: "{{ base_vscodium.components }}"
+        signed_by: "{{ base_vscodium.apt_key_url }}"
         state: present
 
     - name: Install the latest version of VSCodium
       ansible.builtin.apt:
-        name: "{{ vscodium.package }}"
+        name: "{{ base_vscodium.package }}"
         update_cache: true
         cache_valid_time: 0
 
     - name: Install some VSCodium extensions
       ansible.builtin.command: >-
         codium --install-extension {{ item }}
-      loop: "{{ vscodium.extensions }}"
+      loop: "{{ base_vscodium.extensions }}"
       loop_control:
         pause: 1  # slow down installs to avoid rate limiting
       become: true
@@ -266,14 +266,14 @@
     name: "{{ item }}"
     locked: true
     state: latest
-  with_items: "{{ cargo_packages }}"
+  with_items: "{{ base_cargo_packages }}"
   become: true
   become_user: "{{ local_username }}"
 
 - name: Build and install Go binaries
   ansible.builtin.command: "go install {{ item }}"
   changed_when: true
-  with_items: "{{ golang_tools }}"
+  with_items: "{{ base_golang_packages }}"
   become: true
   become_user: "{{ local_username }}"
 
@@ -318,7 +318,7 @@
         version: "{{ item.version | default('HEAD') }}"
         depth: "{{ item.depth | default(omit) }}"
         force: true
-      loop: "{{ git_repos }}"
+      loop: "{{ base_git_repos }}"
 
 - name: Setup tmux
   block:
@@ -330,7 +330,7 @@
 
     - name: Git clone tmux plugin repo
       ansible.builtin.git:
-        repo: "{{ tmux_plugin_repo }}"
+        repo: "{{ base_tmux_tpm_repo_url }}"
         dest: "/home/{{ local_username }}/.tmux/plugins/tpm"
         clone: true
         version: master
@@ -367,7 +367,7 @@
 
     - name: Download nerd fonts to local fonts folder
       ansible.builtin.get_url:
-        url: "{{ nerd_fonts_base_url }}/{{ item }}"
+        url: "{{ base_nerd_fonts_download_base_url }}/{{ item }}"
         dest: >-
           /home/{{ local_username }}/.local/share/fonts/{{ item | basename }}
         mode: '0644'
@@ -376,7 +376,7 @@
       retries: 5
       delay: 5
       until: base_nerd_font_downloads is not failed
-      loop: "{{ nerd_fonts }}"
+      loop: "{{ base_nerd_fonts }}"
       loop_control:
         pause: 1  # slow down downloads to avoid server overload
       notify: Refresh fonts cache
@@ -464,7 +464,7 @@
 
     - name: Clone alacritty themes git repo
       ansible.builtin.git:
-        repo: "{{ alacritty_themes_repo }}"
+        repo: "{{ base_alacritty_themes_repo_url }}"
         dest: "~{{ local_username }}/.config/alacritty/themes"
         clone: true
         version: master
@@ -481,7 +481,7 @@
   block:
     - name: Clone lazyvim starter git repo
       ansible.builtin.git:
-        repo: "{{ lazyvim_starter_url }}"
+        repo: "{{ base_lazyvim_starter_repo_url }}"
         dest: "/home/{{ local_username }}/.config/nvim"
         version: main
 

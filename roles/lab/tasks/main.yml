@@ -3,13 +3,13 @@
   community.docker.docker_image:
     name: "{{ item }}"
     source: pull
-  loop: "{{ ctf_lab_docker_images }}"
+  loop: "{{ lab_docker_images }}"
   loop_control:
     label: "{{ item }}"
 
 - name: Install vulnerable packages
   ansible.builtin.apt:
-    pkg: "{{ ctf_lab_packages }}"
+    pkg: "{{ lab_packages }}"
     state: present
 
 - name: Clone vulnerable lab git repositories
@@ -19,6 +19,6 @@
     version: "{{ item.version | default('HEAD') }}"
     depth: "{{ item.depth | default(omit) }}"
     force: true
-  loop: "{{ ctf_lab_git_repos }}"
+  loop: "{{ lab_git_repos }}"
   loop_control:
     label: "{{ item.dest }}"

@@ -1,12 +1,12 @@
 ---
 
-docker_service: docker
+base_docker_service_name: docker
 
-docker_packages:
+base_docker_packages:
   - docker.io
   - python3-docker
 
-system_packages:
+base_system_packages:
   - alacritty  # GPU-accelerated terminal emulator
   - amass  # In-depth DNS enumeration and attack surface mapping tool
   - arjun  # HTTP parameter discovery suite
@@ -135,7 +135,7 @@ system_packages:
   - zaproxy  # OWASP Zed Attack Proxy - web application security scanner
   - zoxide  # Smarter 'cd' command
 
-pipx_packages:
+base_pipx_packages:
   - chepy  # Python lib/cli equivalent of the awesome CyberChef tool
   - checkov  # Static code analysis tool for security vulnerabilities
   - prowler  # AWS security best practices assessment tool
@@ -144,10 +144,10 @@ pipx_packages:
   - maigret  # OSINT tool to search for usernames across hundreds of platforms
   - uv  # Python package and project manager
 
-cargo_packages:
+base_cargo_packages:
   - tlrc  # Official tldr rust client
 
-golang_tools:
+base_golang_packages:
   # Tool for exploring each layer in a docker image
   - github.com/wagoodman/dive@latest
   - github.com/tomnomnom/anew@latest  # Tool to add new lines to a file
@@ -162,11 +162,11 @@ golang_tools:
 # nerd fonts from https://github.com/ryanoasis/nerd-fonts
 # TODO: bump up version number as newer versions are made available from source
 # git repo
-nerd_fonts_version: v3.5.1
-nerd_fonts_base_url: >-
+base_nerd_fonts_version: v3.5.1
+base_nerd_fonts_download_base_url: >-
   {{ 'https://github.com/ryanoasis/nerd-fonts/raw/'
-     ~ nerd_fonts_version ~ '/patched-fonts' }}
-nerd_fonts:
+     ~ base_nerd_fonts_version ~ '/patched-fonts' }}
+base_nerd_fonts:
   # CascadiaCode (alacritty config uses these four)
   - CascadiaCode/CaskaydiaCoveNerdFont-BoldItalic.ttf
   - CascadiaCode/CaskaydiaCoveNerdFont-Bold.ttf
@@ -185,7 +185,7 @@ nerd_fonts:
   - SourceCodePro/SauceCodeProNerdFontMono-Italic.ttf
   - SourceCodePro/SauceCodeProNerdFontMono-Regular.ttf
 
-projectdiscovery_tools:
+base_projectdiscovery_tools:
   # ProjectDiscovery Tool Manager - manages installation and updates of
   # ProjectDiscovery tools
   - pdtm
@@ -199,10 +199,10 @@ projectdiscovery_tools:
   # Lightweight HTTP server for quick file sharing and testing
   - simplehttpserver
 
-projectdiscovery_tool_manager_url: "https://api.github.com/repos/\
+base_pdtm_latest_release_url: "https://api.github.com/repos/\
   projectdiscovery/pdtm/releases/latest"
 
-vscodium:
+base_vscodium:
   apt_key_url: "https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/\
     raw/master/pub.gpg"
   uris: "https://download.vscodium.com/debs"
@@ -221,15 +221,15 @@ vscodium:
     - golang.Go
     - timonwong.shellcheck
 
-tmux_plugin_repo: "https://github.com/tmux-plugins/tpm"
+base_tmux_tpm_repo_url: "https://github.com/tmux-plugins/tpm"
 
-alacritty_themes_repo: "https://github.com/alacritty/alacritty-theme"
+base_alacritty_themes_repo_url: "https://github.com/alacritty/alacritty-theme"
 
-lazyvim_starter_url: https://github.com/LazyVim/starter.git
+base_lazyvim_starter_repo_url: https://github.com/LazyVim/starter.git
 
 # Attack/defense tooling installed on the base host. Vulnerable environments
 # (e.g. vulhub) belong to the lab role instead.
-git_repos:
+base_git_repos:
   - repo: https://github.com/rebootuser/LinEnum.git
     dest: /opt/privesc-scripts/LinEnum
   - repo: https://github.com/diego-treitos/linux-smart-enumeration
