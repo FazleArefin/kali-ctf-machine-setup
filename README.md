@@ -42,21 +42,23 @@ cd kali-ctf-machine-setup
 
 ### 4. Run the Ansible playbook to install the extra tools
 
-The `base` role always runs (including Docker). The `lab` role is disabled by default; enable it with `lab=true` if you also want a local vulnerable lab.
+The `base` role always runs and gives you the full CTF/pentest host (tooling, wordlists, proxying, Docker, shell/editor configuration, and attack-oriented git repos). The `lab` role is optional and adds deliberately vulnerable targets (DVWA, vulhub, OWASP Juice Shop, OWASP WebGoat) for local practice.
 
-Enter the password for the user (`kali`) when prompted (your user ID might be different if it is a custom installation).
+Choose **one** of the two commands below. Enter the password for the `kali` user when prompted (your username may differ on a custom install); `-K` asks for the become (sudo) password.
 
-#### Install the base CTF/pentest host only
+#### Option A — Base host only (recommended for most users / CTF boxes)
 
 ```zsh
 ansible-playbook -vv -K main.yml
 ```
 
-#### Install the base host and the self-learning lab
+#### Option B — Base host + self-learning lab
 
 ```zsh
 ansible-playbook -vv -e "lab=true" -K main.yml
 ```
+
+> Tip: Ansible is idempotent, so you can re-run either command later (for example, to enable the lab after an initial base-only install by re-running with `-e "lab=true"`).
 
 ### 5. Further customizations (optional)
 
