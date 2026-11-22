@@ -1,0 +1,24 @@
+---
+- name: Pull vulnerable docker images
+  community.docker.docker_image:
+    name: "{{ item }}"
+    source: pull
+  loop: "{{ lab_docker_images }}"
+  loop_control:
+    label: "{{ item }}"
+
+- name: Install vulnerable packages
+  ansible.builtin.apt:
+    pkg: "{{ lab_packages }}"
+    state: present
+
+- name: Clone vulnerable lab git repositories
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+    version: "{{ item.version | default('HEAD') }}"
+    depth: "{{ item.depth | default(omit) }}"
+    force: true
+  loop: "{{ lab_git_repos }}"
+  loop_control:
+    label: "{{ item.dest }}"

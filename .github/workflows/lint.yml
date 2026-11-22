@@ -26,6 +26,9 @@ jobs:
       - name: Install Ansible collections
         run: ansible-galaxy collection install -r requirements.yml
 
+      - name: Check playbook syntax
+        run: ansible-playbook --syntax-check main.yml
+
       - name: Run ansible-lint
         run: ansible-lint
 
@@ -35,4 +38,4 @@ jobs:
       - name: Run ShellCheck
         run: >-
           shellcheck -e SC2148
-          roles/kali_ctf_setup/files/home/user/.shell_*.sh
+          roles/*/files/home/user/.shell_*.sh

@@ -4,6 +4,11 @@
 
 This repo contains Ansible playbooks to install extra tools on top of Kali Linux for CTF (Capture The Flag) and pentest activities.
 
+The setup is split into two roles:
+
+- **`base`** — turns the machine into a general CTF/pentest host (tooling, wordlists, proxying, Docker, shell/editor configuration, attack-oriented git repos).
+- **`lab`** — optional self-learning lab (deliberately vulnerable images and packages such as DVWA, and vulnerable environments such as vulhub).
+
 These tools are useful when playing CTF on platforms such as [Hack The Box](https://www.hackthebox.com/), [TryHackMe](https://tryhackme.com/), etc.
 
 ## Howto?
@@ -11,6 +16,8 @@ These tools are useful when playing CTF on platforms such as [Hack The Box](http
 ### 0. Setup Kali Linux
 
 It is assumed that you have a plain vanilla installation of Kali Linux. This README is tailored for [Kali virtual machine images](https://www.kali.org/get-kali/#kali-virtual-machines)
+
+> ✅ **Tested with:** Kali Linux 2026.3
 
 ### 1. Upgrade packages
 
@@ -37,21 +44,23 @@ cd kali-ctf-machine-setup
 
 ### 4. Run the Ansible playbook to install the extra tools
 
-Enter the password for the user (`kali`) when prompted (your user ID might be different if it is a custom installation).
+The `base` role always runs and gives you the full CTF/pentest host (tooling, wordlists, proxying, Docker, shell/editor configuration, and attack-oriented git repos). The `lab` role is optional and adds deliberately vulnerable targets (DVWA, vulhub, OWASP Juice Shop, OWASP WebGoat) for local practice.
 
-Run one of the commands below depending on whether you want the vulnerable Docker images to be pulled or not.
+Choose **one** of the two commands below. Enter the password for the `kali` user when prompted (your username may differ on a custom install); `-K` asks for the become (sudo) password.
 
-#### Install WITHOUT Docker vulnerable images
-
-```zsh
-ansible-playbook -vv -e "setup_vuln_docker_images=false" -K main.yml
-```
-
-#### Install WITH Docker vulnerable images
+#### Option A — Base host only (recommended for most users / CTF boxes)
 
 ```zsh
-ansible-playbook -vv -e "setup_vuln_docker_images=true" -K main.yml
+ansible-playbook -vv -K main.yml
 ```
+
+#### Option B — Base host + self-learning lab
+
+```zsh
+ansible-playbook -vv -e "lab=true" -K main.yml
+```
+
+> Tip: Ansible is idempotent, so you can re-run either command later (for example, to enable the lab after an initial base-only install by re-running with `-e "lab=true"`).
 
 ### 5. Further customizations (optional)
 
@@ -65,7 +74,7 @@ kali-tweaks
 
 ## Bundled Docker Vulnerable Images
 
-*Docker vulnerable images* are Docker containers running deliberately vulnerable services. The following vulnerable images are installed so that you can practice within your own Kali installation:
+Docker is installed by the `base` role; the optional `lab` role pulls *Docker vulnerable images* — containers running deliberately vulnerable services — so that you can practice within your own Kali installation. It also installs DVWA and clones vulhub. The following images are pulled:
 
 - [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/)
 - [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
@@ -99,11 +108,11 @@ sudo systemctl start dvwa
 
 ## Additional Git Repos
 
-Additional Git repos are cloned locally at the following locations:
+Additional Git repos are cloned locally at the following locations. Everything except `vulhub` is installed by the `base` role; `vulhub` is installed only when the optional `lab` role is enabled.
 
 - [`/opt/GitTools`](https://github.com/internetwache/GitTools): A repository with 3 tools for pwning websites with exposed `.git` directories
 - [`/opt/zphisher`](https://github.com/htr-tech/zphisher): An automated phishing tool with 30+ templates
-- [`/opt/vulhub`](https://github.com/vulhub/vulhub): Pre-built vulnerable environments based on Docker Compose
+- [`/opt/vulhub`](https://github.com/vulhub/vulhub): Pre-built vulnerable environments based on Docker Compose (installed by the `lab` role)
 - [`/opt/privesc-scripts/LinEnum`](https://github.com/rebootuser/LinEnum): Scripted local Linux enumeration & privilege escalation checks
 - [`/opt/privesc-scripts/linux-exploit-suggester`](https://github.com/The-Z-Labs/linux-exploit-suggester): Linux privilege escalation auditing tool
 - [`/opt/privesc-scripts/linux-smart-enumeration`](https://github.com/diego-treitos/linux-smart-enumeration): Linux enumeration tool for pentesting and CTFs with verbosity levels
