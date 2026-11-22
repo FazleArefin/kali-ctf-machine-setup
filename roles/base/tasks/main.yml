@@ -213,7 +213,10 @@
     - name: Update all projectdiscovery.io tools
       ansible.builtin.command: >-
         /home/{{ local_username }}/.pdtm/go/bin/pdtm -update-all
-      changed_when: true
+      register: base_pdtm_update
+      changed_when:
+        - "'updating' in (base_pdtm_update.stdout ~ base_pdtm_update.stderr) | lower"
+        - "'updated' in (base_pdtm_update.stdout ~ base_pdtm_update.stderr) | lower"
 
 - name: Install VSCodium and some plugins
   block:
