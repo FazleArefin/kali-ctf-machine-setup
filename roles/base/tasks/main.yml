@@ -208,7 +208,7 @@
       ansible.builtin.command:
         cmd: "/home/{{ local_username }}/.pdtm/go/bin/pdtm -i {{ item }}"
         creates: "/home/{{ local_username }}/.pdtm/go/bin/{{ item }}"
-      with_items: "{{ base_projectdiscovery_tools }}"
+      loop: "{{ base_projectdiscovery_tools }}"
 
     - name: Update all projectdiscovery.io tools
       ansible.builtin.command: >-
@@ -266,14 +266,14 @@
     name: "{{ item }}"
     locked: true
     state: latest
-  with_items: "{{ base_cargo_packages }}"
+  loop: "{{ base_cargo_packages }}"
   become: true
   become_user: "{{ local_username }}"
 
 - name: Build and install Go binaries
   ansible.builtin.command: "go install {{ item }}"
   changed_when: true
-  with_items: "{{ base_golang_packages }}"
+  loop: "{{ base_golang_packages }}"
   become: true
   become_user: "{{ local_username }}"
 
@@ -433,7 +433,7 @@
         src: "{{ item }}"
         dest: "~{{ local_username }}/{{ item | basename }}"
         mode: '0644'
-      with_items:
+      loop:
         - home/user/.shell_aliases.sh
         - home/user/.shell_functions.sh
         - home/user/.shell_variables.sh
