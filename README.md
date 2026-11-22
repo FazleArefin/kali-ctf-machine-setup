@@ -17,6 +17,8 @@ These tools are useful when playing CTF on platforms such as [Hack The Box](http
 
 It is assumed that you have a plain vanilla installation of Kali Linux. This README is tailored for [Kali virtual machine images](https://www.kali.org/get-kali/#kali-virtual-machines)
 
+> ✅ **Tested with:** Kali Linux 2026.3
+
 ### 1. Upgrade packages
 
 This step is optional as the Ansible playbook takes care of it. However, it is highly recommended to upgrade all installed packages at this stage to avoid issues later.
